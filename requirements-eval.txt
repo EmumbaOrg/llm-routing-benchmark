@@ -1,0 +1,18 @@
+# Ground-truth-validation dependencies for scripts/validate-ground-truth.ts.
+#
+# These are the exact pins BigCodeBench's own authors validate against, filtered down to only the
+# packages our 24 pinned tasks actually import (scanned across code_prompt + canonical_solution +
+# test for every pinned task) — not the full ~71-package requirements-eval.txt, which also pins
+# heavyweight packages (tensorflow, django, etc.) none of our tasks touch.
+#
+# Source: https://github.com/bigcode-project/bigcodebench/blob/main/Requirements/requirements-eval.txt
+# Fetched: 2026-09-04
+numpy==1.21.2
+pandas==2.0.3
+pytz==2023.3.post1
+requests==2.31.0
+openpyxl==3.1.2
+prettytable==3.10.0
+matplotlib==3.7.0
+scikit-learn==1.3.1
+scipy==1.7.2

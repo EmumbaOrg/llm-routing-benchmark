@@ -1,0 +1,17 @@
+{
+  "name": "router-benchmark",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Benchmarks model-decision routers for agentic coding, using Pi as the fixed harness. Phase 1: Pi + OpenRouter direct calls, with per-LLM-call logging.",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "bench": "tsx src/runner.ts"
+  },
+  "devDependencies": {
+    "@earendil-works/pi-coding-agent": "^0.84.2",
+    "@types/node": "^22.10.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0"
+  }
+}
