@@ -1,9 +1,9 @@
 // Shared types for the Phase 1 (Pi + OpenRouter direct) structure.
 // See `Probe Spec_ Router Evaluation.md` §13/§14 for the field lists these mirror.
 
-/** A single benchmark task. `row` carries the source dataset's other fields (e.g. BigCodeBench's
- * `code_prompt`/`test`/`entry_point`) unused by Phase 1's stub grading but needed once real
- * grading exists — mirrors clustering-based-llm-router's Task.row design intentionally. */
+/** A single benchmark task. `row` carries the source dataset's other fields (BigCodeBench's
+ * `code_prompt`/`test`/`entry_point`/etc.) that grading.ts needs — mirrors
+ * clustering-based-llm-router's Task.row design intentionally. */
 export interface Task {
   task_id: string;
   source: string;
@@ -41,15 +41,18 @@ export interface CallLogRecord {
   error: string | null;
   model_cost: number;
   router_cost: number;
-  cost_source: "pi_reported" | "frozen_table" | "unknown";
+  cost_source: "pi_reported" | "frozen_table" | "openrouter_pricing_table" | "unknown";
 }
 
-/** Grading is stubbed this phase — never fabricate a real outcome. See grading.ts. */
-export type GradeOutcome = "not_graded_stub";
+/** Mirrors clustering-based-llm-router's Outcome taxonomy (grading/base.py) — "pass"/"fail"/
+ * "error_no_solution" are real signal; the "error_*" others mean OUR harness couldn't even judge
+ * the attempt (missing dependency, timeout, no result sentinel), not a wrong answer, so they
+ * should be excluded from error-rate math rather than counted as failures. */
+export type GradeOutcome = "pass" | "fail" | "error_missing_dep" | "error_timeout" | "error_harness" | "error_no_solution";
 
 export interface GradeResult {
   outcome: GradeOutcome;
-  detail?: string;
+  detail: string;
 }
 
 /** One row per (task, arm) attempt — the rollup of that attempt's CallLogRecords. */

@@ -4,15 +4,19 @@ import { appendCallLog } from "../../src/log.js";
 import { getCallCost, type PiUsage } from "../../src/pricing.js";
 import type { CallLogRecord } from "../../src/types.js";
 
-// Loose local shape for the bits of turn_end's event we read — the full Pi message/event types
-// weren't pinned down against a live run yet (no OpenRouter credentials in this environment; see
-// the plan's verification section), so this stays intentionally permissive rather than asserting
-// field names we haven't confirmed.
+// Loose local shape for the bits of turn_end's event we read. Confirmed live against a real
+// openrouter/auto call: `message.model` is just Pi's own echo of what we ASKED for ("auto") — for
+// a router model that's useless. `message.responseModel` is the field that actually answers spec
+// §13's "the API response's model field identifies the concrete model that served the request"
+// (confirmed real value: "deepseek/deepseek-v4-flash-0731" for an "openrouter/auto" request).
 interface TurnEndEvent {
   message?: {
     usage?: PiUsage;
     stopReason?: string;
     errorMessage?: string;
+    model?: string;
+    responseModel?: string;
+    provider?: string;
   };
   toolResults?: unknown[];
 }
@@ -40,18 +44,23 @@ export default function (pi: ExtensionAPI) {
     const runId = process.env.ROUTER_BENCH_RUN_ID ?? "unassigned-run";
     const taskId = process.env.ROUTER_BENCH_TASK_ID ?? "unassigned-task";
     const arm = process.env.ROUTER_BENCH_ARM ?? "unassigned-arm";
-    const model = process.env.ROUTER_BENCH_MODEL ?? "unknown-model";
+    const requestedProvider = process.env.ROUTER_BENCH_PROVIDER ?? "unknown-provider";
+    const requestedModel = process.env.ROUTER_BENCH_MODEL ?? "unknown-model";
 
     const turnEvent = event as TurnEndEvent;
+    // The model that actually served the request, per spec §13. Prefers responseModel (the real
+    // resolved model — see the interface comment above), falls back through model, then the
+    // requested model, so selected_model can never come back empty.
+    const selectedModel = turnEvent.message?.responseModel ?? turnEvent.message?.model ?? requestedModel;
     const usage = turnEvent.message?.usage;
-    const { cost, source } = getCallCost(model, usage);
+    const { cost, source } = getCallCost(requestedProvider, selectedModel, usage);
 
     const record: CallLogRecord = {
       run_id: runId,
       task_id: taskId,
       arm,
       call_index: callIndex,
-      selected_model: model,
+      selected_model: selectedModel,
       router_latency_ms: 0, // no selector extension this phase — see arms.ts
       input_tokens: usage?.input ?? 0,
       output_tokens: usage?.output ?? 0,

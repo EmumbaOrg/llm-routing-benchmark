@@ -28,6 +28,23 @@ export function taskResultsPath(runId: string): string {
   return join(ARTIFACTS_DIR, `task-results-${runId}.jsonl`);
 }
 
+/**
+ * Logs are append-only and keyed purely by run_id — re-using a run_id across two separate
+ * invocations silently merges both runs' rows into one file (confirmed real: a stale pre-fix run
+ * and a later re-run under the identical --run-id both landed in the same call-log, doubling
+ * `calls` and letting `.find()`-style lookups grab the wrong, stale row). Call this before a run
+ * starts logging so a collision fails loudly instead of corrupting a file silently.
+ */
+export function assertRunIdIsFresh(runId: string): void {
+  const existing = [callLogPath(runId), taskResultsPath(runId)].filter((p) => existsSync(p));
+  if (existing.length > 0) {
+    throw new Error(
+      `run_id "${runId}" was already used (${existing.join(", ")} exist) — pick a different --run-id ` +
+        `(or omit it for a fresh timestamp) rather than appending to an existing run's logs.`,
+    );
+  }
+}
+
 export function appendCallLog(record: CallLogRecord): void {
   appendJsonLine(callLogPath(record.run_id), record);
 }

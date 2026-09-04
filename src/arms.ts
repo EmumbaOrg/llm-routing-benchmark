@@ -1,10 +1,12 @@
 import type { Arm } from "./types.js";
 
 /**
- * Named router arms. Both OpenRouter router products need zero Pi extension logic (spec §5/§6 —
- * "no Pi routing extension is involved"), wired identically to a direct-model call: just a
- * different `model` id. Not Diamond / Avengers Pro / Foundry arms need the
- * `before_provider_request` selector extension and aren't in scope yet.
+ * Named router arms. The spec (§5/§6) says both OpenRouter router products need zero Pi extension
+ * logic — just a different `model` id, same as a direct call. In practice that's not quite true:
+ * Pi strips OpenRouter's own "openrouter/" namespace prefix before sending, which 404s Pareto Code
+ * outright and leaves Auto depending on undocumented behavior (see
+ * .pi/extensions/openrouter-router-config.ts for the full story and the fix). Not Diamond / Avengers Pro /
+ * Foundry arms need their own `before_provider_request` selector extension and aren't in scope yet.
  *
  * The direct-model (no router) arm isn't listed here — it takes an arbitrary provider/model at
  * the CLI (`--provider`/`--model`) instead of a fixed config entry, so trying a different baseline
