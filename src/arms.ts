@@ -1,21 +1,16 @@
 import type { Arm } from "./types.js";
 
 /**
- * Experimental arms available this phase. Both OpenRouter router products need zero Pi extension
- * logic (spec §5/§6 — "no Pi routing extension is involved"), so they're wired identically to the
- * direct-model arm: just a different `model` id. Not Diamond / Avengers Pro / Foundry arms need
- * the `before_provider_request` selector extension and aren't in scope yet.
+ * Named router arms. Both OpenRouter router products need zero Pi extension logic (spec §5/§6 —
+ * "no Pi routing extension is involved"), wired identically to a direct-model call: just a
+ * different `model` id. Not Diamond / Avengers Pro / Foundry arms need the
+ * `before_provider_request` selector extension and aren't in scope yet.
  *
- * `direct`'s model is intentionally left blank — the fixed baseline model is a decision for later
- * (see the plan). Fill it in before selecting `--arm direct`.
+ * The direct-model (no router) arm isn't listed here — it takes an arbitrary provider/model at
+ * the CLI (`--provider`/`--model`) instead of a fixed config entry, so trying a different baseline
+ * model doesn't need an edit here. See buildDirectArm below.
  */
 export const ARMS: Record<string, Arm> = {
-  direct: {
-    name: "direct",
-    provider: "openrouter",
-    model: "", // TODO: fixed baseline model, decided later
-    description: "Pi -> OpenRouter -> a fixed, named model (no router in the loop).",
-  },
   "openrouter-auto": {
     name: "openrouter-auto",
     provider: "openrouter",
@@ -35,8 +30,16 @@ export function getArm(name: string): Arm {
   if (!arm) {
     throw new Error(`Unknown arm "${name}". Known arms: ${Object.keys(ARMS).join(", ")}`);
   }
-  if (!arm.model) {
-    throw new Error(`Arm "${name}" has no model configured yet (see arms.ts TODO).`);
-  }
   return arm;
+}
+
+/** Builds the ad-hoc "direct" arm (no router — Pi -> provider -> a fixed, named model) from CLI
+ * input, so any provider/model can be used as a baseline without editing ARMS. */
+export function buildDirectArm(provider: string, model: string): Arm {
+  return {
+    name: "direct",
+    provider,
+    model,
+    description: `Pi -> ${provider} -> ${model} directly (no router in the loop).`,
+  };
 }

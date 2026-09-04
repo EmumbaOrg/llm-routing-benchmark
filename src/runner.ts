@@ -1,26 +1,41 @@
 import { spawn } from "node:child_process";
 
-import { getArm } from "./arms.js";
+import { ARMS, buildDirectArm, getArm } from "./arms.js";
 import { grade } from "./grading.js";
 import { appendTaskResult, readCallLog } from "./log.js";
 import { loadPinnedTasks } from "./tasks.js";
-import type { CallLogRecord, TaskResult } from "./types.js";
+import type { Arm, CallLogRecord, TaskResult } from "./types.js";
 
 const PI_TIMEOUT_MS = 120_000;
 
-function parseArgs(argv: string[]): { arm: string; runId: string } {
-  let arm: string | undefined;
+const USAGE =
+  "Usage:\n" +
+  `  npm run bench -- --arm <${Object.keys(ARMS).join("|")}> [--run-id <id>]\n` +
+  "  npm run bench -- --provider <name> --model <id> [--run-id <id>]   (direct, no router)";
+
+function parseArgs(argv: string[]): { arm: Arm; runId: string } {
+  let armName: string | undefined;
+  let provider: string | undefined;
+  let model: string | undefined;
   let runId = new Date().toISOString().replace(/[:.]/g, "-");
   for (let i = 0; i < argv.length; i++) {
-    if (argv[i] === "--arm") arm = argv[++i];
+    if (argv[i] === "--arm") armName = argv[++i];
+    else if (argv[i] === "--provider") provider = argv[++i];
+    else if (argv[i] === "--model") model = argv[++i];
     else if (argv[i] === "--run-id") runId = argv[++i] ?? runId;
   }
-  if (!arm) {
-    throw new Error(
-      "Usage: npm run bench -- --arm <direct|openrouter-auto|openrouter-pareto-code> [--run-id <id>]",
-    );
+
+  const wantsNamedArm = armName !== undefined;
+  const wantsDirectArm = provider !== undefined || model !== undefined;
+  if (wantsNamedArm === wantsDirectArm) {
+    // both given, or neither given — exactly one selection mode is valid
+    throw new Error(USAGE);
   }
-  return { arm, runId };
+  if (wantsDirectArm) {
+    if (!provider || !model) throw new Error(`--provider and --model are both required together.\n${USAGE}`);
+    return { arm: buildDirectArm(provider, model), runId };
+  }
+  return { arm: getArm(armName!), runId };
 }
 
 interface PiRunResult {
@@ -117,8 +132,7 @@ function extractSolution(stdout: string): string | null {
 }
 
 async function main(): Promise<void> {
-  const { arm: armName, runId } = parseArgs(process.argv.slice(2));
-  const arm = getArm(armName);
+  const { arm, runId } = parseArgs(process.argv.slice(2));
   const tasks = loadPinnedTasks();
 
   console.log(`run_id=${runId} arm=${arm.name} model=${arm.model} tasks=${tasks.length}`);
