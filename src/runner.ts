@@ -4,7 +4,7 @@ import { spawn } from "node:child_process";
 
 import { ARMS, buildDirectArm, getArm } from "./arms.js";
 import { grade } from "./grading.js";
-import { appendTaskResult, assertRunIdIsFresh, readCallLog } from "./log.js";
+import { appendTaskDetail, appendTaskResult, assertRunIdIsFresh, readCallLog } from "./log.js";
 import { buildPrompt, extractSolution } from "./prompts.js";
 import { loadPinnedTasks } from "./tasks.js";
 import type { Arm, CallLogRecord, TaskResult } from "./types.js";
@@ -223,6 +223,15 @@ export async function runBenchmark(arm: Arm, runId: string, limit?: number): Pro
       grade: gradeResult,
     };
     appendTaskResult(taskResult);
+    appendTaskDetail({
+      run_id: runId,
+      task_id: task.task_id,
+      arm: arm.name,
+      raw_response: rawResponse,
+      solution,
+      outcome: gradeResult.outcome,
+      detail: gradeResult.detail,
+    });
     taskResults.push(taskResult);
     console.log(
       `   outcome=${gradeResult.outcome} calls=${taskResult.calls} cost=$${taskResult.total_cost_usd.toFixed(5)}`,

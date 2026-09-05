@@ -2,7 +2,7 @@ import { existsSync, mkdirSync, appendFileSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
-import type { CallLogRecord, TaskResult } from "./types.js";
+import type { CallLogRecord, TaskDetail, TaskResult } from "./types.js";
 
 // Resolved relative to this module, not process.cwd() — the extension runs inside Pi's process,
 // whose cwd may differ from wherever `runner.ts` was launched from, so both must agree on the
@@ -28,6 +28,10 @@ export function taskResultsPath(runId: string): string {
   return join(ARTIFACTS_DIR, `task-results-${runId}.jsonl`);
 }
 
+export function taskDetailPath(runId: string): string {
+  return join(ARTIFACTS_DIR, `task-detail-${runId}.jsonl`);
+}
+
 /**
  * Logs are append-only and keyed purely by run_id — re-using a run_id across two separate
  * invocations silently merges both runs' rows into one file (confirmed real: a stale pre-fix run
@@ -36,7 +40,9 @@ export function taskResultsPath(runId: string): string {
  * starts logging so a collision fails loudly instead of corrupting a file silently.
  */
 export function assertRunIdIsFresh(runId: string): void {
-  const existing = [callLogPath(runId), taskResultsPath(runId)].filter((p) => existsSync(p));
+  const existing = [callLogPath(runId), taskResultsPath(runId), taskDetailPath(runId)].filter((p) =>
+    existsSync(p),
+  );
   if (existing.length > 0) {
     throw new Error(
       `run_id "${runId}" was already used (${existing.join(", ")} exist) — pick a different --run-id ` +
@@ -51,6 +57,10 @@ export function appendCallLog(record: CallLogRecord): void {
 
 export function appendTaskResult(result: TaskResult): void {
   appendJsonLine(taskResultsPath(result.run_id), result);
+}
+
+export function appendTaskDetail(detail: TaskDetail): void {
+  appendJsonLine(taskDetailPath(detail.run_id), detail);
 }
 
 /** Reads back every CallLogRecord written so far for a run — the runner uses this to roll up

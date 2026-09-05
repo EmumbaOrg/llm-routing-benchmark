@@ -66,3 +66,19 @@ export interface TaskResult {
   wall_clock_ms: number;
   grade: GradeResult;
 }
+
+/**
+ * The full text behind a TaskResult's terse outcome — what the model actually returned, what got
+ * extracted and graded, and why it passed/failed. Kept in its own log (not folded into
+ * TaskResult/CallLogRecord) since raw responses/solutions are multi-line free text, not the kind
+ * of thing you want bloating a metrics file you're scanning or joining into a CSV.
+ */
+export interface TaskDetail {
+  run_id: string;
+  task_id: string;
+  arm: string;
+  raw_response: string | null; // Pi's full final-message text, before code-block extraction
+  solution: string | null; // what was actually graded (extracted code, or null if none produced)
+  outcome: GradeOutcome;
+  detail: string; // grade.detail — e.g. "PASS", "FAIL 3 failures, 0 errors", an IndentationError, etc.
+}
