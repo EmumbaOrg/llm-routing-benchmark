@@ -2,6 +2,7 @@ import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 
 import { appendCallLog } from "../../src/log.js";
 import { getCallCost, type PiUsage } from "../../src/pricing.js";
+import { takeRouterLatency } from "../../src/router-selection.js";
 import type { CallLogRecord } from "../../src/types.js";
 
 // Loose local shape for the bits of turn_end's event we read. Confirmed live against a real
@@ -61,7 +62,9 @@ export default function (pi: ExtensionAPI) {
       arm,
       call_index: callIndex,
       selected_model: selectedModel,
-      router_latency_ms: 0, // no selector extension this phase — see arms.ts
+      // 0 when no before_provider_request selector extension ran for this turn (e.g. the direct,
+      // openrouter-auto and openrouter-pareto-code arms) — see router-selection.ts.
+      router_latency_ms: takeRouterLatency(),
       input_tokens: usage?.input ?? 0,
       output_tokens: usage?.output ?? 0,
       cache_read_tokens: usage?.cacheRead ?? 0,
@@ -73,7 +76,11 @@ export default function (pi: ExtensionAPI) {
           ? (turnEvent.message.errorMessage ?? "error")
           : null,
       model_cost: cost,
-      router_cost: 0, // no selector extension this phase — see arms.ts
+      // Not Diamond's Model Router charges no separate per-call fee (spec §7: selection is
+      // separate from inference, which is billed directly at the selected model's OpenRouter
+      // rate — same "no additional router fee" story as Auto/Pareto Code); Avengers Pro is the
+      // only arm expected to ever need a nonzero value here.
+      router_cost: 0,
       cost_source: source,
     };
 

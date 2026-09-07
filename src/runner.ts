@@ -6,6 +6,7 @@ import { ARMS, buildDirectArm, getArm } from "./arms.js";
 import { grade } from "./grading.js";
 import { appendTaskDetail, appendTaskResult, assertRunIdIsFresh, readCallLog } from "./log.js";
 import { buildPrompt, extractSolution } from "./prompts.js";
+import { resetRouterLatencyChannel } from "./router-selection.js";
 import { loadPinnedTasks } from "./tasks.js";
 import type { Arm, CallLogRecord, TaskResult } from "./types.js";
 
@@ -186,6 +187,7 @@ export function printSummary(runId: string, arm: Arm, results: TaskResult[]): vo
  * paths exercise the identical logic rather than one re-invoking the other as a subprocess. */
 export async function runBenchmark(arm: Arm, runId: string, limit?: number): Promise<TaskResult[]> {
   assertRunIdIsFresh(runId);
+  resetRouterLatencyChannel();
   const allTasks = loadPinnedTasks();
   // Always the first N of the pinned (already-shuffled, seeded) 24 — same subset every time a
   // given --limit is used, so partial runs stay comparable across arms.
