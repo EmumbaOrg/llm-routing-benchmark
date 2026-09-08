@@ -11,12 +11,17 @@ export interface Task {
   row: Record<string, unknown>;
 }
 
-/** One experimental arm: a concrete Pi provider/model target, no routing logic behind it yet. */
+/** One experimental arm: a concrete provider/model target, no routing logic behind it yet.
+ * `harness` picks which subprocess actually runs the task — "pi" (the default, spawns `pi` per
+ * runner.ts's runPiOnTask) or "copilot" (spawns the `copilot` CLI directly per copilot-runner.ts,
+ * since GitHub Copilot is a self-contained agent, not something Pi routes to). Required rather
+ * than defaulted so every arm states it explicitly. */
 export interface Arm {
   name: string;
   provider: string;
   model: string;
   description: string;
+  harness: "pi" | "copilot";
 }
 
 /**
@@ -43,7 +48,7 @@ export interface CallLogRecord {
   error: string | null;
   model_cost: number;
   router_cost: number;
-  cost_source: "pi_reported" | "frozen_table" | "openrouter_pricing_table" | "unknown";
+  cost_source: "pi_reported" | "frozen_table" | "openrouter_pricing_table" | "copilot_usage_file" | "unknown";
 }
 
 /** Mirrors clustering-based-llm-router's Outcome taxonomy (grading/base.py) — "pass"/"fail"/

@@ -11,6 +11,11 @@ import type { Arm } from "./types.js";
  * the extension to detect before it's swapped for the real selected model. Avengers Pro / Foundry
  * arms aren't in scope yet.
  *
+ * GitHub Copilot is a different shape entirely — not something Pi routes to at all, but a
+ * self-contained agentic CLI with its own Auto model selection. Its `harness: "copilot"` arm
+ * (below) is spawned directly via copilot-runner.ts's runCopilotOnTask, bypassing Pi completely;
+ * `provider`/`model` are otherwise-unused descriptive fields for it (see the entry's own comment).
+ *
  * The direct-model (no router) arm isn't listed here — it takes an arbitrary provider/model at
  * the CLI (`--provider`/`--model`) instead of a fixed config entry, so trying a different baseline
  * model doesn't need an edit here. See buildDirectArm below.
@@ -18,18 +23,21 @@ import type { Arm } from "./types.js";
 export const ARMS: Record<string, Arm> = {
   "openrouter-auto": {
     name: "openrouter-auto",
+    harness: "pi",
     provider: "openrouter",
     model: "openrouter/auto",
     description: "Pi -> OpenRouter Auto Router -> selected model. See spec §6.",
   },
   "openrouter-pareto-code": {
     name: "openrouter-pareto-code",
+    harness: "pi",
     provider: "openrouter",
     model: "openrouter/pareto-code",
     description: "Pi -> OpenRouter Pareto Code -> cheapest model above the frozen coding tier. See spec §5.",
   },
   notdiamond: {
     name: "notdiamond",
+    harness: "pi",
     provider: "openrouter",
     // Synthetic id — .pi/extensions/notdiamond-router.ts detects it and swaps in the model Not
     // Diamond actually selects before Pi sends the request on to OpenRouter. `provider` stays
@@ -37,6 +45,20 @@ export const ARMS: Record<string, Arm> = {
     // arms above.
     model: "__router_notdiamond__",
     description: "Pi -> Not Diamond pre-trained Model Router -> selected model, sent via OpenRouter. See spec §7.",
+  },
+  "copilot-auto": {
+    name: "copilot-auto",
+    harness: "copilot",
+    // No real provider/OpenRouter concept underneath a Copilot call — "copilot" is a descriptive
+    // label (same idea as notdiamond's provider field describing who the request ultimately goes
+    // to), and `model` is the CLI-facing knob ("auto" today; a future pinned-model variant would
+    // set this to a real model id and copilot-runner.ts would pass --model <id>).
+    provider: "copilot",
+    model: "auto",
+    description:
+      "GitHub Copilot CLI (spawned directly, NOT through Pi) using its own Auto model routing. " +
+      "See copilot-runner.ts's module comment for the candidate-pool-restriction caveat — on the " +
+      "currently-authenticated account, Auto has only ever resolved to a single candidate model.",
   },
 };
 
@@ -53,6 +75,7 @@ export function getArm(name: string): Arm {
 export function buildDirectArm(provider: string, model: string): Arm {
   return {
     name: "direct",
+    harness: "pi",
     provider,
     model,
     description: `Pi -> ${provider} -> ${model} directly (no router in the loop).`,

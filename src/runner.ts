@@ -3,6 +3,7 @@ import "dotenv/config"; // loads .env into process.env — silently a no-op if t
 import { spawn } from "node:child_process";
 
 import { ARMS, buildDirectArm, getArm } from "./arms.js";
+import { runCopilotOnTask } from "./copilot-runner.js";
 import { grade } from "./grading.js";
 import { appendTaskDetail, appendTaskResult, assertRunIdIsFresh, readCallLog } from "./log.js";
 import { buildPrompt, extractSolution } from "./prompts.js";
@@ -207,7 +208,10 @@ export async function runBenchmark(arm: Arm, runId: string, limit?: number): Pro
     };
 
     console.log(`-> ${task.task_id}`);
-    const { rawResponse, wallClockMs } = await runPiOnTask(buildPrompt(task), env, arm.provider, arm.model);
+    const { rawResponse, wallClockMs } =
+      arm.harness === "copilot"
+        ? await runCopilotOnTask(buildPrompt(task), env, arm, runId, task.task_id)
+        : await runPiOnTask(buildPrompt(task), env, arm.provider, arm.model);
     const solution = extractSolution(rawResponse);
     const gradeResult = await grade(task, solution);
 
