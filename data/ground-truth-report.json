@@ -1,7 +1,7 @@
 {
-  "validated_at": "2026-09-04T05:08:31.572Z",
+  "validated_at": "2026-09-11T08:23:38.968Z",
   "python_env": {
-    "python_version": "3.9.6",
+    "python_version": "3.10.20",
     "packages": {
       "numpy": "1.21.2",
       "pandas": "2.0.3",
@@ -11,18 +11,13 @@
       "prettytable": "3.10.0",
       "matplotlib": "3.7.0",
       "scikit-learn": "1.3.1",
-      "scipy": "1.7.2"
+      "scipy": "1.7.3"
     }
   },
   "counts": {
-    "pass": 24
+    "pass": 20
   },
   "results": [
-    {
-      "task_id": "BigCodeBench/471",
-      "outcome": "pass",
-      "detail": "PASS"
-    },
     {
       "task_id": "BigCodeBench/410",
       "outcome": "pass",
@@ -69,16 +64,6 @@
       "detail": "PASS"
     },
     {
-      "task_id": "BigCodeBench/535",
-      "outcome": "pass",
-      "detail": "PASS"
-    },
-    {
-      "task_id": "BigCodeBench/1102",
-      "outcome": "pass",
-      "detail": "PASS"
-    },
-    {
       "task_id": "BigCodeBench/1138",
       "outcome": "pass",
       "detail": "PASS"
@@ -120,11 +105,6 @@
     },
     {
       "task_id": "BigCodeBench/1050",
-      "outcome": "pass",
-      "detail": "PASS"
-    },
-    {
-      "task_id": "BigCodeBench/94",
       "outcome": "pass",
       "detail": "PASS"
     },

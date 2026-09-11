@@ -7,6 +7,12 @@
 #
 # Source: https://github.com/bigcode-project/bigcodebench/blob/main/Requirements/requirements-eval.txt
 # Fetched: 2026-09-04
+#
+# scipy is bumped one patch version (1.7.2 -> 1.7.3) from BigCodeBench's own pin: 1.7.2 has no
+# macOS arm64 wheel on PyPI at all (confirmed 2026-09-11), only x86_64, while 1.7.3 does. Every
+# other pin here already has a real arm64 wheel for its exact pinned version, so this was the only
+# one forcing the old x86_64-via-Rosetta venv setup (see bigcodebench-grader.ts). A patch release
+# is bugfixes only, not expected to change grading behavior.
 numpy==1.21.2
 pandas==2.0.3
 pytz==2023.3.post1
@@ -15,4 +21,4 @@ openpyxl==3.1.2
 prettytable==3.10.0
 matplotlib==3.7.0
 scikit-learn==1.3.1
-scipy==1.7.2
+scipy==1.7.3
