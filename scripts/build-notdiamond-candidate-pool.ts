@@ -1,7 +1,12 @@
-// One-off/refresh script: fetches OpenRouter's live model catalog and prints a curated, broad
-// NOTDIAMOND_CANDIDATE_MODELS value spanning every provider Not Diamond supports — replaces the
-// narrow 2-3 model pool used for early testing. Every candidate is confirmed present in the live
-// catalog before being printed, so nothing here is a stale/typo'd slug that would 404 later.
+// One-off/refresh script: fetches OpenRouter's live model catalog and prints
+// NOTDIAMOND_CANDIDATE_MODELS covering everything from Not Diamond's own published catalog
+// (docs.notdiamond.ai/docs/llm-models) that has a real, current OpenRouter slug — the broadest
+// pool Not Diamond's API actually allows (it always requires an explicit llm_providers list, so
+// this is the closest thing to "unrestricted" achievable; the other routers in this project need
+// no candidate list from us at all).
+//
+// Every candidate is confirmed present in the live catalog before being printed, so nothing here
+// is a stale/typo'd slug that would 404 later.
 //
 // Doesn't write .env directly — prints the line, paste it in yourself.
 //
@@ -11,34 +16,76 @@ interface OpenRouterModel {
   id: string;
 }
 
-// Current-generation, non-batch models across every provider Not Diamond's own catalog supports
-// (docs.notdiamond.ai/docs/llm-models) that also has real OpenRouter coverage. OpenAI gets the most
-// representation (flagship, coding-specialized, and cost-efficient tiers); every other provider
-// gets one flagship + one cost-efficient pick. Deliberately skips deprecated/old snapshots
-// (gpt-3.5-turbo, claude-3-haiku, gemini-1.5-flash, etc.) — this is a curated current-generation
-// pool, not Not Diamond's full historical catalog.
+// Translated from Not Diamond's own catalog IDs (which carry dates/dashes, e.g.
+// "claude-sonnet-4-6", "gpt-5-mini-2025-08-07") to their real OpenRouter slugs, confirmed live
+// against OpenRouter's catalog (2026-09-11). Not Diamond's catalog also lists TogetherAI (10
+// models) and Replicate (5 models) entries — dropped entirely, not just individually: OpenRouter
+// has no provider namespace for either at all, so nothing in those two providers is reachable this
+// way. A further ~20 entries (older OpenAI/Anthropic/Google/Mistral/xAI/Cohere snapshots — e.g.
+// gpt-4-0613, claude-3-5-haiku-20241022, grok-3, command-r-plus) were dropped because they're no
+// longer present in OpenRouter's live catalog under any naming variant tried (superseded by newer
+// versions there), not because they're invalid Not Diamond ids.
 const CANDIDATES = [
-  // OpenAI — priority representation
-  "openai/gpt-5.5",
-  "openai/gpt-5.6-luna",
-  "openai/gpt-5.3-codex",
-  "openai/gpt-5.4-mini",
+  // OpenAI
+  "openai/gpt-4o-2024-11-20",
+  "openai/gpt-4o-2024-08-06",
+  "openai/gpt-4o-2024-05-13",
+  "openai/gpt-4-turbo",
+  "openai/gpt-4o-mini-2024-07-18",
+  "openai/gpt-4.1",
+  "openai/gpt-4.1-mini",
+  "openai/gpt-4.1-nano",
+  "openai/gpt-5",
+  "openai/gpt-5-mini",
   "openai/gpt-5-nano",
+  "openai/gpt-5.1",
+  "openai/gpt-5.2",
+  "openai/gpt-5.2-pro",
+  "openai/gpt-5.4-pro",
+  "openai/gpt-5.4-mini",
+  "openai/gpt-5.4-nano",
+  "openai/gpt-5.5",
+  "openai/gpt-oss-120b",
   // Anthropic
-  "anthropic/claude-opus-5",
+  "anthropic/claude-opus-4.7",
+  "anthropic/claude-opus-4",
+  "anthropic/claude-sonnet-4",
+  "anthropic/claude-3-haiku",
+  "anthropic/claude-sonnet-4.6",
+  "anthropic/claude-opus-4.6",
+  "anthropic/claude-opus-4.5",
   "anthropic/claude-haiku-4.5",
+  "anthropic/claude-sonnet-4.5",
+  "anthropic/claude-opus-4.1",
   // Google
+  "google/gemini-2.5-pro",
+  "google/gemini-2.5-flash",
+  "google/gemini-2.5-flash-lite",
+  "google/gemini-3-flash-preview",
   "google/gemini-3.1-pro-preview",
-  "google/gemini-3.8-flash",
-  // xAI
-  "x-ai/grok-4.5",
-  // DeepSeek
-  "deepseek/deepseek-v4-pro",
-  "deepseek/deepseek-v4-flash-0731",
-  // Qwen
-  "qwen/qwen3.7-max",
-  // Mistral — coding-specialized
+  "google/gemini-3.1-flash-lite-preview",
+  "google/gemma-4-31b-it",
+  // Mistral
+  "mistralai/mistral-large-2407",
+  "mistralai/mixtral-8x22b-instruct",
   "mistralai/codestral-2508",
+  "mistralai/mistral-medium-3.1",
+  "mistralai/mistral-small-3.2-24b-instruct",
+  "mistralai/mistral-nemo",
+  // xAI
+  "x-ai/grok-4.3",
+  // DeepSeek
+  "deepseek/deepseek-v4-flash",
+  "deepseek/deepseek-v4-pro",
+  // Qwen
+  "qwen/qwen3.6-plus",
+  // Perplexity
+  "perplexity/sonar",
+  "perplexity/sonar-pro",
+  // Minimax
+  "minimax/minimax-m2.5",
+  // Inception
+  "inception/mercury-2",
 ];
 
 async function main(): Promise<void> {
