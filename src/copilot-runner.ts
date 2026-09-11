@@ -155,10 +155,14 @@ export async function runCopilotOnTask(
     "json",
     "--usage-output-file",
     usagePath,
+    // Always explicit, including "auto" itself (a real, accepted --model value) — confirmed live
+    // (2026-09-08) that omitting --model relies on the CLI's own ambient config default, which is
+    // NOT guaranteed to be "auto": a fresh `copilot login` was observed to reset it to a fixed
+    // model (no session.auto_mode_resolved event at all) rather than "auto". Never rely on that
+    // default silently matching what an arm claims to be requesting.
+    "--model",
+    arm.model,
   ];
-  if (arm.model !== "auto") {
-    args.push("--model", arm.model);
-  }
 
   const started = performance.now();
   const { stdout, exitCode: processExitCode } = await new Promise<{ stdout: string; exitCode: number | null }>(
