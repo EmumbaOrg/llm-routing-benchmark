@@ -1,6 +1,7 @@
 node_modules/
 dist/
 artifacts/
+docs/
 .env
 .DS_Store
 .venv/
