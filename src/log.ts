@@ -74,3 +74,21 @@ export function readCallLog(runId: string): CallLogRecord[] {
     .filter((line) => line.length > 0)
     .map((line) => JSON.parse(line) as CallLogRecord);
 }
+
+/** Reads back every TaskResult written so far for a run — lets a caller (e.g.
+ * scripts/run-comparison.ts) reuse a prior run's results without re-running it. */
+export function readTaskResults(runId: string): TaskResult[] {
+  const path = taskResultsPath(runId);
+  if (!existsSync(path)) return [];
+  return readFileSync(path, "utf8")
+    .split("\n")
+    .map((line) => line.trim())
+    .filter((line) => line.length > 0)
+    .map((line) => JSON.parse(line) as TaskResult);
+}
+
+/** Whether a run already has persisted TaskResult rows — the cache-hit gate for incremental
+ * comparison runs (see scripts/run-comparison.ts): true means skip re-running this arm entirely. */
+export function hasTaskResults(runId: string): boolean {
+  return existsSync(taskResultsPath(runId));
+}

@@ -81,3 +81,16 @@ export function buildDirectArm(provider: string, model: string): Arm {
     description: `Pi -> ${provider} -> ${model} directly (no router in the loop).`,
   };
 }
+
+/** Resolves a CLI-facing arm label (as used by scripts/run-comparison.ts's --arms flag) to a real
+ * Arm — "direct" isn't in ARMS (it needs a provider/model pair, not a fixed config entry), so it's
+ * special-cased here rather than added to the registry. */
+export function resolveArmByLabel(label: string, direct?: { provider: string; model: string }): Arm {
+  if (label === "direct") {
+    if (!direct) {
+      throw new Error('resolveArmByLabel("direct", ...) requires the direct provider/model pair.');
+    }
+    return buildDirectArm(direct.provider, direct.model);
+  }
+  return getArm(label);
+}
