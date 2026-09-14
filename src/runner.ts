@@ -118,13 +118,10 @@ function runPiOnTask(
   });
 }
 
-/**
- * Minimal NDJSON read-back — pulls the final assistant message's raw text out of Pi's
+/** Minimal NDJSON read-back — pulls the final assistant message's raw text out of Pi's
  * `--mode json` event stream. This is NOT the solution yet — prompts.ts's extractSolution() still
- * needs to pull the fenced code block out of it per the grading contract. Usage/cost is NOT
- * derived here either; that comes from the call-logger extension's own log rows (readCallLog),
- * which is the authoritative source per the plan.
- */
+ * needs to pull the fenced code block out of it. Usage/cost is NOT derived here either; that comes
+ * from the call-logger extension's own log rows (readCallLog), the authoritative source. */
 function extractRawResponse(stdout: string): string | null {
   let lastAssistantText: string | null = null;
   for (const line of stdout.split("\n")) {

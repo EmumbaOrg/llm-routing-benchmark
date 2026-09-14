@@ -1,5 +1,4 @@
 // Shared types for the Phase 1 (Pi + OpenRouter direct) structure.
-// See `Probe Spec_ Router Evaluation.md` §13/§14 for the field lists these mirror.
 
 /** A single benchmark task. `row` carries the source dataset's other fields (BigCodeBench's
  * `code_prompt`/`test`/`entry_point`/etc.) that grading.ts needs — mirrors
@@ -24,14 +23,8 @@ export interface Arm {
   harness: "pi" | "copilot";
 }
 
-/**
- * One row per Pi LLM invocation (spec §13's "one log record for every Pi LLM invocation").
- * Field names match the spec's table verbatim where it names one, so the two stay easy to
- * cross-reference. `router_latency_ms` is real for the notdiamond arm (see router-selection.ts);
- * both fields stay 0 for every other arm, and `router_cost` stays 0 for notdiamond too (Not
- * Diamond's Model Router charges no separate per-call fee) — Avengers Pro, if it lands, is the
- * only arm expected to need a nonzero router_cost.
- */
+/** One row per Pi LLM invocation. `router_latency_ms`/`router_cost` are real only for the
+ * notdiamond arm (see router-selection.ts) and stay 0 for every other arm. */
 export interface CallLogRecord {
   run_id: string;
   task_id: string;

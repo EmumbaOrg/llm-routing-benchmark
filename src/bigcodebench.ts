@@ -53,9 +53,8 @@ async function fetchPage(offset: number, length: number): Promise<BigCodeBenchRo
 }
 
 export async function fetchAllBigCodeBenchRows(): Promise<BigCodeBenchRow[]> {
-  // Verified live (2026-09-03): v0.1.4 has exactly 1140 rows, 9 columns, and the datasets-server
-  // caps each page at 100 rows regardless of a larger requested `length` — hence the pagination
-  // loop below rather than a single fetch.
+  // The datasets-server caps each page at 100 rows regardless of a larger requested `length` —
+  // hence the pagination loop below rather than a single fetch.
   const rows: BigCodeBenchRow[] = [];
   let offset = 0;
   for (;;) {

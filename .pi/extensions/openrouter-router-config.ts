@@ -1,28 +1,11 @@
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 
-/**
- * Two jobs for OpenRouter's own router products (Auto, Pareto Code), both handled in the same
- * `before_provider_request` hook since both act on the same outgoing payload:
- *
- * 1. RESTORE THE DOCUMENTED MODEL ID. OpenRouter's router products live in OpenRouter's own
- *    "openrouter/" provider namespace — but Pi's request-building strips that prefix before
- *    sending (confirmed live, via a diagnostic before_provider_request dump). That's FATAL for
- *    Pareto Code (OpenRouter 404s on the bare "pareto-code" id — "No endpoints available") and
- *    silently relies on UNDOCUMENTED behavior for Auto (OpenRouter currently tolerates bare
- *    "auto", but its own docs only ever document "openrouter/auto"/"openrouter/auto-beta" as the
- *    two real slugs, and bare "auto" isn't in OpenRouter's public model catalogue at all).
- *
- * 2. INJECT THE FROZEN ROUTER CONFIG, if set. Spec §5/§6 ask to freeze Pareto's min_coding_score
- *    and Auto's cost setting "for the complete benchmark" and "record" the value used. Reading
- *    these from env (see .env.example) means that config lives in one discoverable, documented
- *    place instead of hardcoded here — and an unset var means NO plugins array is sent at all, so
- *    each router falls back to its own documented default (Pareto: High tier; Auto: full
- *    catalogue, account default cost setting) — this is the behavior already verified live and
- *    matches "no plugins array" being the deliberate starting point.
- *
- * Scoped to ROUTER_BENCH_PROVIDER=openrouter (set by runner.ts) so this never touches requests to
- * any other provider.
- */
+/** Two jobs for OpenRouter's own router products (Auto, Pareto Code), in one
+ * `before_provider_request` hook. (1) Restores the documented "openrouter/" model id Pi's
+ * request-building strips before sending — fatal for Pareto Code (404s on the bare id) and
+ * undocumented behavior for Auto. (2) Injects the frozen router config from env (see
+ * .env.example), if set — an unset var sends no plugins array, so each router falls back to its
+ * own documented default. Scoped to ROUTER_BENCH_PROVIDER=openrouter (set by runner.ts). */
 const RESTORE_MODEL_ID: Record<string, string> = {
   "pareto-code": "openrouter/pareto-code",
   auto: "openrouter/auto",

@@ -63,7 +63,12 @@ and `scripts/validate-ground-truth.ts`.
 | `NOTDIAMOND_COST_QUALITY_TRADEOFF` | `notdiamond` | Optional, 0–10; omit to use Not Diamond's own default. |
 
 `copilot-auto` takes no candidate-pool config — it uses the Copilot CLI's own `--model auto`, and
-whatever account/subscription `copilot` is logged into.
+whatever account/subscription `copilot` is logged into. There is also no CLI flag or per-session
+parameter to restrict which models Auto considers (unlike `AUTO_ALLOWED_MODELS`/
+`NOTDIAMOND_CANDIDATE_MODELS`) — that's only controllable via an org/enterprise Business+ admin
+policy, applied account-wide. On past test runs, Auto has sometimes resolved to just one candidate
+model for every prompt tried, i.e. not exercising any real routing decision — re-check
+`candidateModels`/`availableModels` in a fresh run's output before assuming otherwise.
 
 ## Running
 

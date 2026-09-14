@@ -6,8 +6,7 @@
 // actually executing Python code, which conflicts with this project's "pure TS, no Python shell"
 // scope for the ongoing benchmark runtime. Run scripts/validate-ground-truth.ts separately right
 // after this (it's the one place in this project that shells out to Python, deliberately, as a
-// one-off curation step) before treating the pinned set as final. Real BigCodeBench grading is
-// still a stub (see src/grading.ts).
+// one-off curation step) before treating the pinned set as final.
 //
 // Run with: npx tsx scripts/select-pinned-tasks.ts
 
@@ -46,12 +45,9 @@ function primaryLib(row: BigCodeBenchRow): string {
   return row.libs[0] ?? "none";
 }
 
-/**
- * Stratifies by primary library so the pinned set isn't dominated by whichever library happens to
- * be most common in BigCodeBench (proxy for task-domain diversity — there's no explicit domain
- * field on this dataset). Caps how many tasks share a primary library, starting at 3 and loosening
- * only if the pool can't otherwise reach sampleSize.
- */
+/** Stratifies by primary library so the pinned set isn't dominated by whichever library happens to
+ * be most common in BigCodeBench. Caps how many tasks share a primary library, starting at 3 and
+ * loosening only if the pool can't otherwise reach sampleSize. */
 function selectStratified(rows: BigCodeBenchRow[], sampleSize: number, seed: number): BigCodeBenchRow[] {
   const shuffled = seededShuffle(rows, mulberry32(seed));
   for (let cap = 3; cap <= sampleSize; cap++) {

@@ -5,11 +5,9 @@ import { getCallCost, type PiUsage } from "../../src/pricing.js";
 import { takeRouterLatency } from "../../src/router-selection.js";
 import type { CallLogRecord } from "../../src/types.js";
 
-// Loose local shape for the bits of turn_end's event we read. Confirmed live against a real
-// openrouter/auto call: `message.model` is just Pi's own echo of what we ASKED for ("auto") — for
-// a router model that's useless. `message.responseModel` is the field that actually answers spec
-// §13's "the API response's model field identifies the concrete model that served the request"
-// (confirmed real value: "deepseek/deepseek-v4-flash-0731" for an "openrouter/auto" request).
+// Loose local shape for the bits of turn_end's event we read. `message.model` is just Pi's own
+// echo of what we ASKED for ("auto") — for a router model that's useless. `message.responseModel`
+// is the field that actually identifies the concrete model that served the request.
 interface TurnEndEvent {
   message?: {
     usage?: PiUsage;
@@ -22,14 +20,10 @@ interface TurnEndEvent {
   toolResults?: unknown[];
 }
 
-/**
- * Logging only — no routing logic. One row per Pi LLM invocation (spec §13), written via
- * `appendCallLog`. `turn_start`/`turn_end` bracket one LLM invocation per the spec's own framing
- * (spec §3: "One Pi LLM invocation = one routing opportunity").
- *
- * `runner.ts` sets ROUTER_BENCH_* env vars once per spawned `pi` process, so this extension knows
- * which task/arm/model it's logging for without any other coordination.
- */
+/** Logging only — no routing logic. One row per Pi LLM invocation, written via `appendCallLog`.
+ * `turn_start`/`turn_end` bracket one LLM invocation. `runner.ts` sets ROUTER_BENCH_* env vars once
+ * per spawned `pi` process, so this extension knows which task/arm/model it's logging for without
+ * any other coordination. */
 export default function (pi: ExtensionAPI) {
   let callIndex = 0;
   let turnStartedAt = 0;
@@ -49,9 +43,9 @@ export default function (pi: ExtensionAPI) {
     const requestedModel = process.env.ROUTER_BENCH_MODEL ?? "unknown-model";
 
     const turnEvent = event as TurnEndEvent;
-    // The model that actually served the request, per spec §13. Prefers responseModel (the real
-    // resolved model — see the interface comment above), falls back through model, then the
-    // requested model, so selected_model can never come back empty.
+    // The model that actually served the request. Prefers responseModel (the real resolved model
+    // — see the interface comment above), falls back through model, then the requested model, so
+    // selected_model can never come back empty.
     const selectedModel = turnEvent.message?.responseModel ?? turnEvent.message?.model ?? requestedModel;
     const usage = turnEvent.message?.usage;
     const { cost, source } = getCallCost(requestedProvider, selectedModel, usage);
@@ -76,10 +70,9 @@ export default function (pi: ExtensionAPI) {
           ? (turnEvent.message.errorMessage ?? "error")
           : null,
       model_cost: cost,
-      // Not Diamond's Model Router charges no separate per-call fee (spec §7: selection is
-      // separate from inference, which is billed directly at the selected model's OpenRouter
-      // rate — same "no additional router fee" story as Auto/Pareto Code); Avengers Pro is the
-      // only arm expected to ever need a nonzero value here.
+      // Not Diamond's Model Router charges no separate per-call fee — selection is separate from
+      // inference, which is billed directly at the selected model's OpenRouter rate, same as
+      // Auto/Pareto Code.
       router_cost: 0,
       cost_source: source,
     };

@@ -17,14 +17,11 @@ interface OpenRouterModel {
 }
 
 // Translated from Not Diamond's own catalog IDs (which carry dates/dashes, e.g.
-// "claude-sonnet-4-6", "gpt-5-mini-2025-08-07") to their real OpenRouter slugs, confirmed live
-// against OpenRouter's catalog (2026-09-11). Not Diamond's catalog also lists TogetherAI (10
-// models) and Replicate (5 models) entries — dropped entirely, not just individually: OpenRouter
-// has no provider namespace for either at all, so nothing in those two providers is reachable this
-// way. A further ~20 entries (older OpenAI/Anthropic/Google/Mistral/xAI/Cohere snapshots — e.g.
-// gpt-4-0613, claude-3-5-haiku-20241022, grok-3, command-r-plus) were dropped because they're no
-// longer present in OpenRouter's live catalog under any naming variant tried (superseded by newer
-// versions there), not because they're invalid Not Diamond ids.
+// "claude-sonnet-4-6", "gpt-5-mini-2025-08-07") to their real OpenRouter slugs. Not Diamond's
+// catalog also lists TogetherAI and Replicate entries — dropped entirely, not just individually:
+// OpenRouter has no provider namespace for either at all, so nothing in those two providers is
+// reachable this way. Older provider snapshots superseded by newer versions on OpenRouter were
+// dropped too, not because they're invalid Not Diamond ids.
 const CANDIDATES = [
   // OpenAI
   "openai/gpt-4o-2024-11-20",

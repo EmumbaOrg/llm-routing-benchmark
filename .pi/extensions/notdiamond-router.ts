@@ -3,19 +3,14 @@ import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { recordRouterLatency } from "../../src/router-selection.js";
 
 /**
- * Not Diamond's pre-trained (general) Model Router — spec §7. Pi is run with the synthetic model
- * id below; this `before_provider_request` hook detects it, calls Not Diamond's selection
- * endpoint, swaps in the real model it picked, and lets Pi send the (now-real) request straight
- * to OpenRouter itself — Not Diamond never sees or proxies the actual inference call.
+ * Not Diamond's pre-trained (general) Model Router. Pi is run with the synthetic model id below;
+ * this `before_provider_request` hook detects it, calls Not Diamond's selection endpoint, swaps in
+ * the real model it picked, and lets Pi send the (now-real) request straight to OpenRouter itself
+ * — Not Diamond never sees or proxies the actual inference call.
  *
- * Endpoint/schema confirmed 2026-09-07 against Not Diamond's own live API reference
- * (docs.notdiamond.ai/reference/token_model_select_v2_modelrouter_modelselect_post), AND against a
- * real request (scripts/diagnose-notdiamond-select.ts, Not-Diamond-only, no LLM provider call).
- * That live call ruled out the docs' own {provider, model} shape for `llm_providers` under
- * ?type=openrouter — sending `provider: "openrouter"` per entry gets a 400 ("All providers must be
- * OpenRouterProvider instances"). The shape that actually works is `{model: "<slug>"}` with NO
- * `provider` field at all — confirmed 200, with the response echoing back
- * `{"provider":"openrouter","model":"<the same slug>"}`.
+ * Under `?type=openrouter`, `llm_providers` entries must be `{model: "<slug>"}` with NO `provider`
+ * field — sending `provider: "openrouter"` per entry (the docs' own {provider, model} shape) 400s
+ * with "All providers must be OpenRouterProvider instances".
  */
 const NOT_DIAMOND_MODEL_ID = "__router_notdiamond__";
 
@@ -34,9 +29,9 @@ interface NotDiamondSelectResponse {
 }
 
 /** NOTDIAMOND_CANDIDATE_MODELS: comma-separated OpenRouter model slugs, e.g.
- * "anthropic/claude-sonnet-4.5,openai/gpt-5-mini" — frozen once per spec §4/§7, same convention as
- * AUTO_ALLOWED_MODELS. Sent to Not Diamond as {model: slug} — no `provider` field, confirmed live
- * (see the module doc comment above). */
+ * "anthropic/claude-sonnet-4.5,openai/gpt-5-mini" — frozen once per run, same convention as
+ * AUTO_ALLOWED_MODELS. Sent to Not Diamond as {model: slug} — no `provider` field (see the module
+ * doc comment above). */
 function parseCandidatePool(value: string | undefined): NotDiamondCandidate[] {
   if (!value) {
     throw new Error(
@@ -50,10 +45,9 @@ function parseCandidatePool(value: string | undefined): NotDiamondCandidate[] {
   return slugs.map((model) => ({ model }));
 }
 
-/** Turns a Not Diamond provider/model pair back into an OpenRouter model id Pi can send. Confirmed
- * live that `provider` always comes back "openrouter" under ?type=openrouter, in which case
- * `model` is already the full slug; the provider/model fallback below is defensive only, for a
- * shape not seen in the live call. */
+/** Turns a Not Diamond provider/model pair back into an OpenRouter model id Pi can send. `provider`
+ * always comes back "openrouter" under ?type=openrouter, in which case `model` is already the full
+ * slug; the provider/model fallback below is defensive only, for a shape not otherwise seen. */
 function resolveOpenRouterModelId(selected: NotDiamondSelectedProvider): string {
   return selected.provider === "openrouter" ? selected.model : `${selected.provider}/${selected.model}`;
 }
@@ -64,8 +58,8 @@ export default function (pi: ExtensionAPI) {
     if (payload.model !== NOT_DIAMOND_MODEL_ID) return;
 
     const candidatePool = parseCandidatePool(process.env.NOTDIAMOND_CANDIDATE_MODELS);
-    // Optional — spec §7 asks to freeze one value per experiment and record it, not to tune it
-    // live; unset means Not Diamond's own documented default (7) applies.
+    // Frozen once per experiment and recorded, not tuned live; unset means Not Diamond's own
+    // documented default (7) applies.
     const costQualityTradeoffEnv = process.env.NOTDIAMOND_COST_QUALITY_TRADEOFF;
     const costQualityTradeoff = costQualityTradeoffEnv ? Number(costQualityTradeoffEnv) : undefined;
 

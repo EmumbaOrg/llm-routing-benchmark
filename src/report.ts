@@ -10,14 +10,11 @@ export interface ComparisonRun {
   results: TaskResult[];
 }
 
-/**
- * One row per task_id (union across all runs), wide format — each run contributes a
+/** One row per task_id (union across all runs), wide format — each run contributes a
  * `<label>_*` column group: requested_model, selected_model, routed, outcome, cost_usd,
  * latency_ms. `selected_model` comes from the run's CallLogRecord (readCallLog), not TaskResult —
- * that's the only place the ACTUAL served model lives (see call-logger.ts / pricing.ts fixes
- * earlier this session). Single-turn/no-tools tasks always produce exactly one call, so the
- * task_id join between TaskResult and CallLogRecord is 1:1.
- */
+ * that's the only place the ACTUAL served model lives. Single-turn/no-tools tasks always produce
+ * exactly one call, so the task_id join between TaskResult and CallLogRecord is 1:1. */
 export function buildComparisonReport(runs: ComparisonRun[]): Record<string, unknown>[] {
   const taskIds = [...new Set(runs.flatMap((run) => run.results.map((r) => r.task_id)))].sort();
 

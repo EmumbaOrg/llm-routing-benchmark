@@ -4,7 +4,7 @@ import { dirname, join } from "node:path";
 
 import type { CallLogRecord } from "./types.js";
 
-/** The shape of `event.message.usage` on Pi's `turn_end`/`message_end` events (see extensions.md). */
+/** The shape of `event.message.usage` on Pi's `turn_end`/`message_end` events. */
 export interface PiUsage {
   input?: number;
   output?: number;
@@ -29,13 +29,11 @@ interface OpenRouterPrice {
 
 let openRouterPrices: Record<string, OpenRouterPrice> | null = null;
 
-/**
- * Loaded from data/openrouter-pricing.json (scripts/fetch-openrouter-pricing.ts), a frozen
+/** Loaded from data/openrouter-pricing.json (scripts/fetch-openrouter-pricing.ts), a frozen
  * snapshot of OpenRouter's real published per-token prices for every model — needed because Pi
  * does NOT compute real cost for OpenRouter's router models (openrouter/auto,
- * openrouter/pareto-code): confirmed live, `usage.cost.total` stays 0 for the whole call, since Pi
- * has no static local price for a virtual routing id. Lazy + cached: only read once per process.
- */
+ * openrouter/pareto-code): `usage.cost.total` stays 0 for the whole call, since Pi has no static
+ * local price for a virtual routing id. Lazy + cached: only read once per process. */
 function loadOpenRouterPrices(): Record<string, OpenRouterPrice> {
   if (openRouterPrices) return openRouterPrices;
   if (!existsSync(OPENROUTER_PRICING_PATH)) {
@@ -58,12 +56,10 @@ function costFromOpenRouterTable(model: string, usage: PiUsage | undefined): num
   );
 }
 
-/**
- * Hand-maintained $/1M-token fallback for non-OpenRouter providers, only if Pi's own reported
+/** Hand-maintained $/1M-token fallback for non-OpenRouter providers, only if Pi's own reported
  * cost is ever missing. Left EMPTY: Pi's self-reported cost has proven accurate for direct
- * anthropic/openai/local-provider calls (real runs this session) — this stays dormant unless a
- * live call proves that wrong for some other provider/model.
- */
+ * anthropic/openai/local-provider calls — this stays dormant unless a live call proves that wrong
+ * for some other provider/model. */
 export const FROZEN_PRICES: Record<string, { inputPer1M: number; outputPer1M: number }> = {};
 
 function estimateCost(model: string, inputTokens: number, outputTokens: number): number | null {

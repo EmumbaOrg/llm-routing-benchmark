@@ -8,7 +8,7 @@
 // always rebuilt fresh from whatever's on disk (cheap re-derivation, not incremental editing).
 //
 // Run with: npx tsx scripts/run-comparison.ts [--limit <n>] [--run-id <id>] [--arms <labels>]
-// --arms defaults to "direct,openrouter-auto,openrouter-pareto-code" (today's original set).
+// --arms defaults to "direct,openrouter-auto,openrouter-pareto-code".
 // No --limit = full 24 pinned tasks per (freshly-run) arm, real cost for each arm actually run.
 
 import "dotenv/config";

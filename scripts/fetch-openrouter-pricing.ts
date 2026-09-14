@@ -2,11 +2,11 @@
 // freezes per-token pricing for every model into data/openrouter-pricing.json.
 //
 // Why this exists: Pi does not compute real cost for OpenRouter's router models (openrouter/auto,
-// openrouter/pareto-code) — confirmed live, `usage.cost.total` stays 0 for the whole call, because
-// Pi has no static price for a virtual routing id. OpenRouter's response itself DOES carry real
-// billed cost, but Pi's own normalization doesn't surface it. So pricing.ts computes cost itself
-// from (real resolved model, from message.responseModel) x (real token counts, already logged) x
-// (this frozen table), instead of trusting Pi's report for openrouter-provider calls.
+// openrouter/pareto-code) — `usage.cost.total` stays 0 for the whole call, because Pi has no
+// static price for a virtual routing id. OpenRouter's response itself DOES carry real billed cost,
+// but Pi's own normalization doesn't surface it. So pricing.ts computes cost itself from (real
+// resolved model, from message.responseModel) x (real token counts, already logged) x (this frozen
+// table), instead of trusting Pi's report for openrouter-provider calls.
 //
 // Re-run this whenever OpenRouter's pricing may have moved and you want the benchmark's cost
 // numbers to reflect current rates — it's a frozen snapshot, not a live lookup per call.

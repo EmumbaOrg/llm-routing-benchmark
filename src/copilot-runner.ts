@@ -1,45 +1,21 @@
 /**
  * Runs one task through the GitHub Copilot CLI (`copilot`) directly — NOT through Pi. Copilot is a
- * self-contained agentic coding CLI with its own Auto model-selection feature, so unlike every
- * other arm (which only ever changes which `model` string Pi is told to use), a `harness: "copilot"`
- * arm bypasses Pi entirely: this file spawns `copilot` itself and builds/appends the
- * `CallLogRecord` directly, since there's no Pi extension mechanism to hook into a non-Pi process.
+ * self-contained agentic CLI with its own Auto model-selection, so this arm bypasses Pi entirely:
+ * it spawns `copilot` itself and builds/appends the `CallLogRecord` directly (no Pi extension
+ * mechanism to hook into a non-Pi process, but also no module-isolation concern the way
+ * router-selection.ts has — this file and runner.ts share one ordinary process/module graph).
  *
- * Confirmed live (2026-09-08) against a real authenticated `copilot` CLI and a real pinned task:
- * `--output-format json` emits real JSONL to stdout, and `--usage-output-file <path>` writes a
- * separate JSON file after the process exits with a per-model token/cost breakdown. Cost math was
- * hand-verified against GitHub's own published per-model $/token rate card
- * (docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing): reconstructing
- * `usage.totalNanoAiu * 1e-11` independently from raw token counts × published rates matched to
- * the ten-thousandth of a cent — so, unlike OpenRouter's arms (see pricing.ts), no separate frozen
- * pricing table is needed here; the usage file self-reports the real dollar cost.
+ * `--output-format json` emits JSONL to stdout; `--usage-output-file <path>` writes a per-model
+ * token/cost breakdown after exit, matching GitHub's published rate card — so unlike OpenRouter's
+ * arms (see pricing.ts), the usage file self-reports the real dollar cost directly.
  *
- * CANDIDATE-POOL RESTRICTION IS NOT A PER-RUN KNOB. Unlike AUTO_ALLOWED_MODELS/
- * NOTDIAMOND_CANDIDATE_MODELS, there is no CLI flag or per-session parameter to restrict which
- * models Copilot's Auto mode considers — that's only controllable via an org/enterprise Business+
- * admin policy (Settings -> Copilot -> Models), applied account-wide, not scoped per benchmark run.
- * On the currently-authenticated test account, `candidateModels`/`availableModels` showed exactly
- * one model for every prompt tried, including a real pinned BigCodeBench task — so "Auto" is not
- * currently exercising any real routing decision on this account, just always resolving to one
- * fixed model. Don't imply otherwise in analysis of this arm's results without re-checking.
+ * A real Copilot failure prints a plain-text `Error: ...` line and exits nonzero WITHOUT ever
+ * emitting a `result` JSONL event — so `parsed.exitCode` stays `null` and detection falls back to
+ * the real child-process exit code (`parsed.exitCode ?? processExitCode`, see below).
  *
- * ERROR HANDLING — confirmed live against a real failure (2026-09-08, `--model
- * this-model-does-not-exist-xyz`): a real Copilot failure prints a plain-text `Error: ...` line
- * and exits nonzero WITHOUT ever emitting a `result` JSONL event at all — so `parsed.exitCode`
- * (which only comes from a `result` event) stays `null`, and detecting the failure relies on
- * falling back to the real child-process exit code instead (see `processExitCode` below). Both are
- * checked via `parsed.exitCode ?? processExitCode`.
- *
- * RECORD GRANULARITY: one CallLogRecord per `copilot` invocation (call_index always 1), not one
- * per internal LLM turn the way call-logger.ts does for Pi — `--usage-output-file` only reports
- * session-level aggregates, not a per-turn breakdown, so a genuinely multi-turn Copilot task would
- * under-count `calls` relative to an equivalent Pi arm. In practice, with --available-tools
- * suppressing tool use, real traces should reduce to exactly one LLM call per task anyway.
- *
- * No module-isolation concern here (contrast with router-selection.ts's file-channel workaround,
- * needed only because Pi isolates each *extension's* module graph): this file and runner.ts share
- * one ordinary process/module graph, so a plain function call and return value is all that's
- * needed to get data back to the caller.
+ * One CallLogRecord per invocation (call_index always 1), not per internal LLM turn — the usage
+ * file only reports session-level aggregates, and `--available-tools` suppressing tool use should
+ * reduce real traces to one LLM call per task anyway.
  */
 import { spawn } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync } from "node:fs";
@@ -150,15 +126,14 @@ export async function runCopilotOnTask(
     "-s",
     "--allow-all-tools",
     "--no-ask-user",
-    "--available-tools", // no tool names follow -> no tools available; see this file's doc comment on the "no-tools" equivalent, unconfirmed until the first real run
+    "--available-tools", // no tool names follow -> no tools available
     "--output-format",
     "json",
     "--usage-output-file",
     usagePath,
-    // Always explicit, including "auto" itself (a real, accepted --model value) — confirmed live
-    // (2026-09-08) that omitting --model relies on the CLI's own ambient config default, which is
-    // NOT guaranteed to be "auto": a fresh `copilot login` was observed to reset it to a fixed
-    // model (no session.auto_mode_resolved event at all) rather than "auto". Never rely on that
+    // Always explicit, including "auto" itself (a real, accepted --model value) — omitting
+    // --model relies on the CLI's own ambient config default, which is NOT guaranteed to be
+    // "auto" (a fresh `copilot login` can reset it to a fixed model instead). Never rely on that
     // default silently matching what an arm claims to be requesting.
     "--model",
     arm.model,
@@ -212,8 +187,7 @@ export async function runCopilotOnTask(
     cache_write_tokens: modelMetrics?.usage?.cacheWriteTokens ?? 0,
     total_call_latency_ms: parsed.totalCallLatencyMs || wallClockMs,
     tool_calls: parsed.toolCalls,
-    // Falls back to the real process exit code since a real failure never emits a `result` event
-    // (confirmed live — see this file's doc comment).
+    // Falls back to the real process exit code since a real failure never emits a `result` event.
     error: (parsed.exitCode ?? processExitCode) !== 0 ? `copilot exited ${parsed.exitCode ?? processExitCode}` : null,
     model_cost: modelMetrics?.totalNanoAiu !== undefined ? modelMetrics.totalNanoAiu * 1e-11 : 0,
     router_cost: 0, // bundled into the one billed call — same reasoning as the notdiamond arm

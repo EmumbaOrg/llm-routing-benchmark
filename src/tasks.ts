@@ -16,12 +16,9 @@ interface PinnedTasksFile {
   tasks: Array<{ task_id: string; instruct_prompt: string } & Record<string, unknown>>;
 }
 
-/**
- * Loads the frozen ~20-25 task BigCodeBench set from data/pinned-tasks.json (produced by
+/** Loads the frozen ~20-25 task BigCodeBench set from data/pinned-tasks.json (produced by
  * scripts/select-pinned-tasks.ts) so every arm/run uses the identical tasks. Falls back to a
- * couple of hardcoded placeholder tasks if that file hasn't been generated yet, so the
- * runner/logging plumbing still works before pinning is done.
- */
+ * couple of hardcoded placeholder tasks if that file hasn't been generated yet. */
 export function loadPinnedTasks(): Task[] {
   if (!existsSync(PINNED_TASKS_PATH)) {
     return stubTasks();

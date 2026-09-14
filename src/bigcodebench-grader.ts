@@ -7,14 +7,8 @@
 //
 // Runs under a DEDICATED venv (.venv/), not ambient `python3` on PATH — built from
 // requirements-eval.txt, BigCodeBench's own pinned eval dependencies (with one deliberate patch
-// bump, scipy 1.7.2 -> 1.7.3 — see that file's own comment), so results are reproducible on any
-// machine, not just this one. Native arm64 throughout, built with `uv` rather than the system
-// python3 — no Rosetta, no `arch -x86_64` needed anywhere. (An earlier x86_64-via-Rosetta venv,
-// built against the unpatched scipy==1.7.2 pin which has no macOS arm64 wheel at all, broke when
-// this machine's Xcode Command Line Tools dropped x86_64 support from `xcrun`'s own library —
-// there was no working x86_64 Python left on the system at all. Bumping the one pin that actually
-// needed it removed the dependency on x86_64/Rosetta entirely instead of chasing that further.)
-// Set up with:
+// bump, scipy 1.7.2 -> 1.7.3, for arm64 wheel availability). Native arm64 throughout, built with
+// `uv` rather than the system python3. Set up with:
 //   uv venv --python 3.10 .venv
 //   uv pip install --python .venv/bin/python3 -r requirements-eval.txt
 
