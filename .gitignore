@@ -1,7 +1,8 @@
 node_modules/
 dist/
 artifacts/
-docs/
+/docs/*
+!/docs/flows/
 .env
 .DS_Store
 .venv/
