@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Benchmarks model-decision routers for agentic coding, using Pi as the fixed harness. Phase 1: Pi + OpenRouter direct calls, with per-LLM-call logging.",
+  "description": "Benchmarks model-decision routers for agentic coding — direct/OpenRouter Auto/OpenRouter Pareto Code/Not Diamond/GitHub Copilot Auto — against a fixed set of pinned BigCodeBench tasks, with per-LLM-call cost/latency/routing logging.",
   "scripts": {
     "typecheck": "tsc --noEmit",
     "bench": "tsx src/runner.ts"

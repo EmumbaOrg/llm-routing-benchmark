@@ -10,17 +10,18 @@ Run manually, before any benchmark run — not part of the measured runtime.
 ```mermaid
 flowchart TD
     A["bigcodebench.ts\nfetchAllBigCodeBenchRows()"] -->|"HF datasets-server, paginated 100/page"| B["select-pinned-tasks.ts"]
-    B -->|"seeded stratified sample\nby primary library"| C["data/pinned-tasks.json\n(ground_truth_validated: false)"]
+    B -->|"seeded stratified sample\nby primary library"| C["data/pinned-tasks.json\n(24 tasks,\nground_truth_validated: false)"]
     C --> D["validate-ground-truth.ts"]
     D -->|"gradeBigCodeBench(\ncanonical_solution vs test)"| E["data/ground-truth-report.json"]
+    C --> F["real multi-arm comparison run\n(scripts/run-comparison.ts)"]
+    F -->|"manual review:\nsame 4 tasks fail identically\nacross every arm"| G["data/pinned-tasks.json\nhand-edited: 4 tasks removed,\nrecorded in excluded_tasks,\nsample_size corrected to 20"]
 ```
 
 1. `bigcodebench.ts`'s `fetchAllBigCodeBenchRows` pulls every row of BigCodeBench-Instruct
    (`bigcode/bigcodebench`, split `v0.1.4`) via the Hugging Face datasets-server REST API,
    paginating since the server caps each page at 100 rows.
 2. `select-pinned-tasks.ts` takes a seeded, stratified sample (24 tasks, capped per primary
-   library so no single library dominates) and freezes it to `data/pinned-tasks.json` — every
-   arm/run in this project is measured against this identical, frozen task set.
+   library so no single library dominates) and freezes it to `data/pinned-tasks.json`.
    `ground_truth_validated` is written `false` at this point.
 3. `validate-ground-truth.ts` is the one place in this project that shells out to Python: it runs
    each task's own `canonical_solution` against its own `test` suite (via
@@ -29,6 +30,18 @@ flowchart TD
    `ground_truth_validated` flag back to `true` — that's a manual judgment call once you've
    reviewed the report and decided whether to drop/replace any task that fails its own ground
    truth.
+4. Passing your own ground truth isn't the only bar: a task can still have a prompt/test spec bug
+   that no model could reasonably satisfy (e.g. the test expects Title-Case dict keys the prompt
+   never mentions, or asserts on values only reproducible via an undisclosed reference
+   implementation). That class of problem only surfaces once real models actually attempt the
+   task, so it's caught by *reviewing a real comparison run*, not by ground-truth validation.
+   4 of the original 24 tasks were excluded this way — all 3 arms in an early 24-task comparison
+   run failed each of them identically, and inspection showed a genuine spec bug rather than a
+   model shortcoming. This step has no dedicated script: the 4 tasks were removed from
+   `pinned-tasks.json`'s `tasks` array by hand, each with its reasoning recorded under
+   `excluded_tasks`, and `sample_size` corrected from 24 to 20 to match. **20, not 24, is the
+   real, currently-used pinned set** — every arm/run in this project is measured against those
+   20 tasks.
 
 ## 2. Single-arm benchmark run
 
@@ -81,9 +94,11 @@ Diamond — the two `.pi/extensions/*.ts` files and the log they write to.
 flowchart TD
     A["pi process starts\n(env: ROUTER_BENCH_*)"] --> B{"before_provider_request"}
     B -->|"openrouter-auto /\nopenrouter-pareto-code"| C["openrouter-router-config.ts\nrestores openrouter/ prefix,\ninjects frozen plugin config"]
-    B -->|"notdiamond\n(synthetic model id)"| D["notdiamond-router.ts\ncalls Not Diamond's\nmodelSelect API"]
+    B -->|"notdiamond\n(synthetic model id)"| D0["notdiamond-router.ts\nGET /v2/models\n(live, full catalog, every call)"]
+    D0 --> D["POST /v2/modelRouter/modelSelect\n(native mode, no ?type=openrouter)"]
     B -->|"direct"| E["payload passes through\nunchanged"]
     D -->|"recordRouterLatency()"| F["router-selection.ts\ntemp-file channel"]
+    D -->|"warnIfOutOfOpenRouterScope()"| W["console.warn if selection\nhas no live OpenRouter match"]
     C --> G["real request sent\nto OpenRouter"]
     D --> G
     E --> G
@@ -100,9 +115,14 @@ flowchart TD
    request-building strips (fatal for Pareto Code, undocumented behavior for Auto if left bare),
    and injects the frozen `min_coding_score`/cost-tier plugin config from env, if set.
 3. For `notdiamond`, Pi is run with a synthetic model id (`__router_notdiamond__`);
-   `notdiamond-router.ts` detects it, calls Not Diamond's `modelSelect` endpoint with the
-   configured candidate pool, and swaps in the real OpenRouter model id it picked — Not Diamond
-   never proxies the actual inference call.
+   `notdiamond-router.ts` detects it, fetches Not Diamond's **entire live model catalog**
+   (`GET /v2/models`, no env-configured list, no caching — a fresh fetch on every single call) and
+   calls `modelSelect` in Not Diamond's **native mode** (no `?type=openrouter`), so it isn't
+   limited to models that already have an OpenRouter mapping. Whichever model comes back gets
+   written into the outgoing request; if that model has no live OpenRouter counterpart,
+   `warnIfOutOfOpenRouterScope` logs a warning rather than failing silently, since the actual
+   inference call below still always goes through OpenRouter. Not Diamond itself never proxies
+   the inference call — it only returns the decision.
 4. Only `notdiamond-router.ts` calls `recordRouterLatency` — it's the only arm with real routing
    latency to report. That latency crosses from the selector extension to `call-logger.ts`
    through a temp-file channel (`router-selection.ts`), not a plain module variable, because Pi

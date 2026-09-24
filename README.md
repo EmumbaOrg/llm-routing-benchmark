@@ -59,16 +59,23 @@ and `scripts/validate-ground-truth.ts`.
 | `AUTO_COST_TIER` | `openrouter-auto` | Deprecated alternate form of the above; takes precedence if both are set. |
 | `AUTO_ALLOWED_MODELS`, `AUTO_EXCLUDED_MODELS` | `openrouter-auto` | Comma-separated wildcard patterns restricting Auto's candidate pool (e.g. `anthropic/*`). Leave blank for unrestricted. |
 | `NOTDIAMOND_API_KEY` | `notdiamond` | Not Diamond API key. |
-| `NOTDIAMOND_CANDIDATE_MODELS` | `notdiamond` | Comma-separated OpenRouter slugs Not Diamond is allowed to select from — the API always requires an explicit list (no "unrestricted" mode). Regenerate with `npx tsx scripts/build-notdiamond-candidate-pool.ts`. |
 | `NOTDIAMOND_COST_QUALITY_TRADEOFF` | `notdiamond` | Optional, 0–10; omit to use Not Diamond's own default. |
 
-`copilot-auto` takes no candidate-pool config — it uses the Copilot CLI's own `--model auto`, and
-whatever account/subscription `copilot` is logged into. There is also no CLI flag or per-session
-parameter to restrict which models Auto considers (unlike `AUTO_ALLOWED_MODELS`/
-`NOTDIAMOND_CANDIDATE_MODELS`) — that's only controllable via an org/enterprise Business+ admin
-policy, applied account-wide. On past test runs, Auto has sometimes resolved to just one candidate
-model for every prompt tried, i.e. not exercising any real routing decision — re-check
-`candidateModels`/`availableModels` in a fresh run's output before assuming otherwise.
+`notdiamond`'s candidate pool is fetched live from Not Diamond's own `GET /v2/models` on every
+call, not a frozen/env-configured list — always the full current catalog, no restriction. It also
+calls `modelSelect` in native mode (no `?type=openrouter`), so it isn't limited to models that
+already have an OpenRouter mapping; see `.pi/extensions/notdiamond-router.ts`'s module doc comment
+for why, and what happens when a selection turns out to have no real OpenRouter counterpart.
+
+`copilot-auto` takes no candidate-pool config either — it uses the Copilot CLI's own `--model
+auto`, and whatever account/subscription `copilot` is logged into. There is also no CLI flag or
+per-session parameter to restrict which models Auto considers — that's only controllable via an
+org/enterprise Business+ admin policy, applied account-wide. Auto's real routing diversity depends
+heavily on sample size: early small-sample runs (a handful of calls) sometimes saw it resolve to
+just one candidate model throughout, i.e. not exercising any real routing decision. A full 20-task
+run has since shown genuine diversity (5 distinct models picked across 20 tasks) — but re-check
+`candidateModels`/`availableModels` in your own run's output before assuming either behavior holds
+for your account/session.
 
 ## Running
 
@@ -96,7 +103,6 @@ reference data needs refreshing:
 - `scripts/select-pinned-tasks.ts` — samples and freezes the pinned task set to `data/pinned-tasks.json`.
 - `scripts/validate-ground-truth.ts` — runs each pinned task's own reference solution against its own test suite (the one other place, besides real grading, that needs the Python venv from setup step 2) and writes `data/ground-truth-report.json`.
 - `scripts/fetch-openrouter-pricing.ts` — refreshes the frozen per-token pricing snapshot in `data/openrouter-pricing.json` (OpenRouter's router models don't report real cost themselves).
-- `scripts/build-notdiamond-candidate-pool.ts` — regenerates `NOTDIAMOND_CANDIDATE_MODELS` from Not Diamond's published catalog, cross-checked against OpenRouter's live catalog.
 
 ## Artifacts
 
