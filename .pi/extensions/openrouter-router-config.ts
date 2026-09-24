@@ -27,9 +27,11 @@ function buildPlugins(resolvedModel: string): Array<Record<string, unknown>> | u
   }
 
   if (resolvedModel === "openrouter/auto") {
+    // cost_tier (low/medium/high/xhigh/max) is Auto's current parameter; cost_quality_tradeoff
+    // (0-10) is the deprecated one it replaced — OpenRouter still accepts it for backwards
+    // compatibility, but cost_tier takes precedence if both are set. Confirmed directly against
+    // OpenRouter's own docs (openrouter.ai/docs/guides/routing/routers/auto-router), not assumed.
     const costTier = process.env.AUTO_COST_TIER;
-    // Deprecated (see .env.example) — OpenRouter still accepts it, cost_tier takes precedence if
-    // both are set, so no need to enforce exclusivity ourselves.
     const costQualityTradeoff = process.env.AUTO_COST_QUALITY_TRADEOFF;
     const allowedModels = splitList(process.env.AUTO_ALLOWED_MODELS);
     const excludedModels = splitList(process.env.AUTO_EXCLUDED_MODELS);

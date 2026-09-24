@@ -45,6 +45,13 @@ not remove any model from eligibility. Supplied here as `7` for both `notdiamond
 one arm/knob combination in this project that's a real eligibility filter rather than a
 preference.
 
+For `openrouter-auto` specifically: `AUTO_COST_QUALITY_TRADEOFF` (0–10) is OpenRouter's
+**deprecated** legacy parameter — confirmed against OpenRouter's own docs, not assumed. Its
+replacement, `AUTO_COST_TIER` (`low`/`medium`/`high`/`xhigh`/`max`), is the current parameter and
+takes precedence if both are set. This project currently configures the deprecated one; it still
+works (kept for backwards compatibility), it's just not the parameter OpenRouter's docs now point
+new integrations toward.
+
 **Pinned task set** — the fixed 20 BigCodeBench-Instruct tasks every arm/run is measured against
 (`data/pinned-tasks.json`). Originally a stratified sample of 24 (see
 `scripts/select-pinned-tasks.ts`); 4 were later hand-removed (recorded under the file's
@@ -80,3 +87,11 @@ self-reported cost, used for `direct` and Not Diamond's actual OpenRouter infere
 models), and `copilot_usage_file` (taken directly from GitHub's own per-session usage/billing
 file). Keep the pricing snapshot refreshed (`scripts/fetch-openrouter-pricing.ts`) — a stale entry
 for even one model can silently understate a whole arm's reported cost.
+
+A fourth number, `router_cost`, is hardcoded to `0` for every arm, including `notdiamond` — but
+that's not a confirmed fact for Not Diamond specifically. Their own pricing page lists a real
+routing fee ($0.05/million tokens routed); whether it applies to this project's decision-only
+`modelSelect` call (vs. a different, fully-proxied Not Diamond product) isn't documented publicly.
+Left at `0` because the practical impact is negligible at this project's prompt sizes (~600-800
+tokens/call), not because the fee is confirmed absent — don't repeat "Not Diamond charges nothing
+for routing" as settled fact.

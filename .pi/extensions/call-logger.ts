@@ -70,9 +70,13 @@ export default function (pi: ExtensionAPI) {
           ? (turnEvent.message.errorMessage ?? "error")
           : null,
       model_cost: cost,
-      // Not Diamond's Model Router charges no separate per-call fee — selection is separate from
-      // inference, which is billed directly at the selected model's OpenRouter rate, same as
-      // Auto/Pareto Code.
+      // Hardcoded 0, not confirmed free: Not Diamond's own pricing page lists a real routing fee
+      // ($0.05/million tokens routed), contradicting an earlier assumption here that routing was
+      // free. Whether that fee applies to this project's decision-only modelSelect call
+      // specifically (vs. a different, fully-proxied product) isn't documented publicly — left at
+      // 0 since the practical impact is negligible at this project's prompt sizes (~600-800
+      // tokens/call, i.e. a fraction of a millionth of a cent even if the fee does apply), not
+      // because the fee is confirmed absent. See CONTEXT.md's "Cost source" entry.
       router_cost: 0,
       cost_source: source,
     };

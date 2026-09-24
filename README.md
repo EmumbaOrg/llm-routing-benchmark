@@ -55,8 +55,8 @@ and `scripts/validate-ground-truth.ts`.
 |---|---|---|
 | `BASELINE_PROVIDER`, `BASELINE_MODEL` | `direct` | Fixed baseline model used when `npm run bench` is invoked with no `--arm`/`--provider`/`--model` flags. |
 | `PARETO_MIN_CODING_SCORE` | `openrouter-pareto-code` | OpenRouter Pareto Code's coding-capability tier threshold (0–1). |
-| `AUTO_COST_QUALITY_TRADEOFF` | `openrouter-auto` | OpenRouter Auto's cost/quality knob (0–10). |
-| `AUTO_COST_TIER` | `openrouter-auto` | Deprecated alternate form of the above; takes precedence if both are set. |
+| `AUTO_COST_TIER` | `openrouter-auto` | OpenRouter Auto's current cost-band knob (`low`/`medium`/`high`/`xhigh`/`max`, default `low`); takes precedence if both this and the one below are set. |
+| `AUTO_COST_QUALITY_TRADEOFF` | `openrouter-auto` | Deprecated 0–10 form of the above, kept for backwards compatibility per OpenRouter's own docs; prefer `AUTO_COST_TIER` in new configuration. |
 | `AUTO_ALLOWED_MODELS`, `AUTO_EXCLUDED_MODELS` | `openrouter-auto` | Comma-separated wildcard patterns restricting Auto's candidate pool (e.g. `anthropic/*`). Leave blank for unrestricted. |
 | `NOTDIAMOND_API_KEY` | `notdiamond` | Not Diamond API key. |
 | `NOTDIAMOND_COST_QUALITY_TRADEOFF` | `notdiamond` | Optional, 0–10; omit to use Not Diamond's own default. |
