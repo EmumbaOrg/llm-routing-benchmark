@@ -1,7 +1,193 @@
 {
-  "fetched_at": "2026-09-04T08:17:08.323Z",
+  "fetched_at": "2026-09-22T06:36:40.501Z",
   "source": "https://openrouter.ai/api/v1/models",
   "prices": {
+    "xiaomi/mimo-v2.6-pro-ultraspeed": {
+      "prompt": 0.00000435,
+      "completion": 0.0000087,
+      "cacheRead": 3.6e-8,
+      "cacheWrite": 0
+    },
+    "xiaomi/mimo-v2.6-flash": {
+      "prompt": 1.4e-7,
+      "completion": 2.8e-7,
+      "cacheRead": 2.8e-9,
+      "cacheWrite": 0
+    },
+    "xiaomi/mimo-v2.6-pro": {
+      "prompt": 4.35e-7,
+      "completion": 8.7e-7,
+      "cacheRead": 3.6e-9,
+      "cacheWrite": 0
+    },
+    "x-ai/grok-4.7": {
+      "prompt": 0.0000016,
+      "completion": 0.0000048,
+      "cacheRead": 4e-7,
+      "cacheWrite": 0
+    },
+    "prism-ml/ternary-bonsai-2-27b": {
+      "prompt": 7.5e-8,
+      "completion": 5e-7,
+      "cacheRead": 0,
+      "cacheWrite": 0
+    },
+    "z-ai/glm-5.3-flashx": {
+      "prompt": 3.7e-7,
+      "completion": 0.00000125,
+      "cacheRead": 7.5e-8,
+      "cacheWrite": 0
+    },
+    "unbiased/pareto": {
+      "prompt": 0.0000025,
+      "completion": 0.0000075,
+      "cacheRead": 2.5e-7,
+      "cacheWrite": 0
+    },
+    "~deepseek/deepseek-pro-latest": {
+      "prompt": 6.38616e-7,
+      "completion": 0.000001915848,
+      "cacheRead": 2.12872e-8,
+      "cacheWrite": 0
+    },
+    "~deepseek/deepseek-flash-latest": {
+      "prompt": 1.2e-7,
+      "completion": 4.8e-7,
+      "cacheRead": 3.6e-9,
+      "cacheWrite": 0
+    },
+    "inference-net/schematron-v2-turbo": {
+      "prompt": 3e-8,
+      "completion": 1.5e-7,
+      "cacheRead": 3e-8,
+      "cacheWrite": 0
+    },
+    "inference-net/schematron-v2-small": {
+      "prompt": 5e-8,
+      "completion": 2.3e-7,
+      "cacheRead": 5e-8,
+      "cacheWrite": 0
+    },
+    "~openai/gpt-astra-latest": {
+      "prompt": 0.00001,
+      "completion": 0.00005,
+      "cacheRead": 0.000001,
+      "cacheWrite": 0.0000125
+    },
+    "~openai/gpt-sol-latest": {
+      "prompt": 0.000002,
+      "completion": 0.00001,
+      "cacheRead": 2e-7,
+      "cacheWrite": 0.0000025
+    },
+    "~openai/gpt-terra-latest": {
+      "prompt": 0.000002,
+      "completion": 0.000012,
+      "cacheRead": 2e-7,
+      "cacheWrite": 0.0000025
+    },
+    "~openai/gpt-luna-latest": {
+      "prompt": 2e-7,
+      "completion": 0.0000012,
+      "cacheRead": 2e-8,
+      "cacheWrite": 2.5e-7
+    },
+    "sakana/fugu-ultra-v2": {
+      "prompt": 0.000005,
+      "completion": 0.00003,
+      "cacheRead": 5e-7,
+      "cacheWrite": 0
+    },
+    "sakana/fugu-max": {
+      "prompt": 0.000002,
+      "completion": 0.000006,
+      "cacheRead": 2.5e-7,
+      "cacheWrite": 0
+    },
+    "inclusionai/ling-3.0-flash-vl": {
+      "prompt": 6e-8,
+      "completion": 1.8e-7,
+      "cacheRead": 1.2e-8,
+      "cacheWrite": 0
+    },
+    "inclusionai/ling-3.0-flash-vl:free": {
+      "prompt": 0,
+      "completion": 0,
+      "cacheRead": 0,
+      "cacheWrite": 0
+    },
+    "deepseek/deepseek-v4.1-flash": {
+      "prompt": 3e-7,
+      "completion": 0.0000012,
+      "cacheRead": 6e-9,
+      "cacheWrite": 0
+    },
+    "inception/mercury-2.5": {
+      "prompt": 4e-8,
+      "completion": 1.5e-7,
+      "cacheRead": 4e-9,
+      "cacheWrite": 0
+    },
+    "nex-agi/nex-n2.5-mini": {
+      "prompt": 2.5e-8,
+      "completion": 1e-7,
+      "cacheRead": 2.5e-9,
+      "cacheWrite": 0
+    },
+    "nex-agi/nex-n2.5-mini:free": {
+      "prompt": 0,
+      "completion": 0,
+      "cacheRead": 0,
+      "cacheWrite": 0
+    },
+    "nex-agi/nex-n2.5-pro": {
+      "prompt": 7.5e-8,
+      "completion": 2.5e-7,
+      "cacheRead": 1.5e-8,
+      "cacheWrite": 0
+    },
+    "nex-agi/nex-n2.5-pro:free": {
+      "prompt": 0,
+      "completion": 0,
+      "cacheRead": 0,
+      "cacheWrite": 0
+    },
+    "openai/gpt-6-astra": {
+      "prompt": 0.00001,
+      "completion": 0.00005,
+      "cacheRead": 0.000001,
+      "cacheWrite": 0.0000125
+    },
+    "openai/gpt-6-astra:batch": {
+      "prompt": 0.000005,
+      "completion": 0.000025,
+      "cacheRead": 5e-7,
+      "cacheWrite": 0.00000625
+    },
+    "openai/gpt-6-astra-pro": {
+      "prompt": 0.00001,
+      "completion": 0.00005,
+      "cacheRead": 0.000001,
+      "cacheWrite": 0.0000125
+    },
+    "openai/gpt-6-astra-pro:batch": {
+      "prompt": 0.000005,
+      "completion": 0.000025,
+      "cacheRead": 5e-7,
+      "cacheWrite": 0.00000625
+    },
+    "inclusionai/ling-3.0-flash-sante:free": {
+      "prompt": 0,
+      "completion": 0,
+      "cacheRead": 0,
+      "cacheWrite": 0
+    },
+    "qwen/qwen3.8-max-0902": {
+      "prompt": 0.000002,
+      "completion": 0.000006,
+      "cacheRead": 2.5e-7,
+      "cacheWrite": 0.0000025
+    },
     "meta/muse-spark-1.3-contributor": {
       "prompt": 1e-7,
       "completion": 2e-7,
@@ -38,16 +224,10 @@
       "cacheRead": 1.25e-7,
       "cacheWrite": 0.00000625
     },
-    "inception/mercury-2.5-preview": {
-      "prompt": 4e-8,
-      "completion": 1.5e-7,
-      "cacheRead": 4e-9,
-      "cacheWrite": 0
-    },
     "ibm-granite/granite-4.2-8b": {
-      "prompt": 1e-7,
-      "completion": 1.5e-7,
-      "cacheRead": 5e-8,
+      "prompt": 6e-8,
+      "completion": 2.5e-7,
+      "cacheRead": 1.5e-8,
       "cacheWrite": 0
     },
     "tencent/hy4-preview": {
@@ -81,15 +261,15 @@
       "cacheWrite": 2e-7
     },
     "z-ai/glm-5.3-flash": {
-      "prompt": 7.5e-8,
-      "completion": 2.5e-7,
-      "cacheRead": 1.5e-8,
+      "prompt": 1.5e-7,
+      "completion": 5e-7,
+      "cacheRead": 5e-8,
       "cacheWrite": 0
     },
     "z-ai/glm-5.3-flash:batch": {
-      "prompt": 1.5e-7,
-      "completion": 5e-7,
-      "cacheRead": 3e-8,
+      "prompt": 7.5e-8,
+      "completion": 2.5e-7,
+      "cacheRead": 1.5e-8,
       "cacheWrite": 0
     },
     "meta/muse-spark-1.2-contributor": {
@@ -99,9 +279,15 @@
       "cacheWrite": 0
     },
     "deepseek/deepseek-v4-flash-vision-exp": {
-      "prompt": 4.4e-7,
-      "completion": 0.00000132,
-      "cacheRead": 1.4e-8,
+      "prompt": 2.2e-7,
+      "completion": 6.6e-7,
+      "cacheRead": 7e-9,
+      "cacheWrite": 0
+    },
+    "deepseek/deepseek-v4-flash-vision-exp:batch": {
+      "prompt": 1.1e-7,
+      "completion": 3.3e-7,
+      "cacheRead": 3.5e-9,
       "cacheWrite": 0
     },
     "tencent/hy-mt2-1.8b": {
@@ -117,9 +303,9 @@
       "cacheWrite": 0
     },
     "~z-ai/glm-latest": {
-      "prompt": 0.00000115,
-      "completion": 0.0000035,
-      "cacheRead": 1e-7,
+      "prompt": 6.545e-7,
+      "completion": 0.000002057,
+      "cacheRead": 1.07525e-7,
       "cacheWrite": 0
     },
     "tencent/hy-mt2-7b": {
@@ -129,15 +315,27 @@
       "cacheWrite": 0
     },
     "z-ai/glm-5.3": {
-      "prompt": 0.0000014,
-      "completion": 0.0000044,
-      "cacheRead": 1.4e-7,
+      "prompt": 8.4e-7,
+      "completion": 0.00000264,
+      "cacheRead": 1.56e-7,
+      "cacheWrite": 0
+    },
+    "z-ai/glm-5.3:batch": {
+      "prompt": 7e-7,
+      "completion": 0.0000022,
+      "cacheRead": 1.3e-7,
       "cacheWrite": 0
     },
     "qwen/qwen3.8-27b": {
       "prompt": 4.2e-7,
       "completion": 0.000003,
       "cacheRead": 8.5e-8,
+      "cacheWrite": 0
+    },
+    "qwen/qwen3.8-27b:free": {
+      "prompt": 0,
+      "completion": 0,
+      "cacheRead": 0,
       "cacheWrite": 0
     },
     "dots-studio/dots-3-note-preview:free": {
@@ -170,12 +368,6 @@
       "cacheRead": 2.5e-7,
       "cacheWrite": 0
     },
-    "qwen/qwen3.8-2.4t-a95b:batch": {
-      "prompt": 0.000002,
-      "completion": 0.000006,
-      "cacheRead": 2.5e-7,
-      "cacheWrite": 0
-    },
     "bytedance-seed/seed-2.0-code": {
       "prompt": 5e-7,
       "completion": 0.000003,
@@ -183,15 +375,15 @@
       "cacheWrite": 0
     },
     "deepseek/deepseek-v4-pro-0813": {
-      "prompt": 0.0000011154,
-      "completion": 0.0000033462,
-      "cacheRead": 3.718e-8,
+      "prompt": 0.00000132,
+      "completion": 0.00000396,
+      "cacheRead": 4.4e-8,
       "cacheWrite": 0
     },
     "deepseek/deepseek-v4-pro-0813:batch": {
-      "prompt": 0.00000132,
-      "completion": 0.00000396,
-      "cacheRead": 1.3e-7,
+      "prompt": 6.6e-7,
+      "completion": 0.00000198,
+      "cacheRead": 2.2e-8,
       "cacheWrite": 0
     },
     "x-ai/grok-4.6": {
@@ -207,7 +399,7 @@
       "cacheWrite": 0
     },
     "nvidia/nemotron-3.5-lightning": {
-      "prompt": 8e-8,
+      "prompt": 7e-8,
       "completion": 2e-7,
       "cacheRead": 4e-8,
       "cacheWrite": 0
@@ -225,21 +417,21 @@
       "cacheWrite": 0
     },
     "upstage/solar-pro4": {
-      "prompt": 3e-8,
-      "completion": 1.2e-7,
-      "cacheRead": 6e-9,
+      "prompt": 9e-8,
+      "completion": 3.6e-7,
+      "cacheRead": 1.8e-8,
       "cacheWrite": 0
     },
     "meta/muse-glimmer-30b": {
       "prompt": 3e-7,
-      "completion": 0.0000011,
+      "completion": 0.0000012,
       "cacheRead": 4e-8,
       "cacheWrite": 0
     },
     "meta/muse-glimmer-30b:batch": {
-      "prompt": 3.5e-7,
-      "completion": 0.0000015,
-      "cacheRead": 4e-8,
+      "prompt": 1.75e-7,
+      "completion": 7.5e-7,
+      "cacheRead": 2e-8,
       "cacheWrite": 0
     },
     "meta/muse-spark-1.2": {
@@ -248,38 +440,26 @@
       "cacheRead": 1.5e-7,
       "cacheWrite": 0
     },
-    "qwen/qwen3.8-max": {
-      "prompt": 0.000002,
-      "completion": 0.000006,
-      "cacheRead": 2.5e-7,
-      "cacheWrite": 0.0000025
-    },
     "~deepseek/deepseek-v4-flash-latest": {
-      "prompt": 5e-8,
-      "completion": 1.6e-7,
-      "cacheRead": 1.3e-8,
+      "prompt": 3e-8,
+      "completion": 0.000001,
+      "cacheRead": 8e-9,
       "cacheWrite": 0
     },
     "deepseek/deepseek-v4-flash-0731": {
-      "prompt": 6.5e-8,
-      "completion": 1.8e-7,
+      "prompt": 4e-8,
+      "completion": 6.4e-7,
       "cacheRead": 1.6e-8,
       "cacheWrite": 0
     },
     "deepseek/deepseek-v4-flash-0731:batch": {
-      "prompt": 1.4e-7,
-      "completion": 2.8e-7,
-      "cacheRead": 3e-8,
+      "prompt": 1.1e-7,
+      "completion": 3.3e-7,
+      "cacheRead": 3.5e-9,
       "cacheWrite": 0
     },
     "thinkingmachines/inkling-small": {
       "prompt": 4.5e-7,
-      "completion": 0.0000012,
-      "cacheRead": 1e-7,
-      "cacheWrite": 0
-    },
-    "thinkingmachines/inkling-small:batch": {
-      "prompt": 5e-7,
       "completion": 0.0000012,
       "cacheRead": 1e-7,
       "cacheWrite": 0
@@ -362,12 +542,6 @@
       "cacheRead": 1.7e-7,
       "cacheWrite": 0
     },
-    "thinkingmachines/inkling:batch": {
-      "prompt": 0.000001,
-      "completion": 0.00000405,
-      "cacheRead": 1.7e-7,
-      "cacheWrite": 0
-    },
     "thinkingmachines/inkling:free": {
       "prompt": 0,
       "completion": 0,
@@ -381,12 +555,6 @@
       "cacheWrite": 0
     },
     "moonshotai/kimi-k3": {
-      "prompt": 0.000003,
-      "completion": 0.000015,
-      "cacheRead": 3e-7,
-      "cacheWrite": 0
-    },
-    "moonshotai/kimi-k3:batch": {
       "prompt": 0.000003,
       "completion": 0.000015,
       "cacheRead": 3e-7,
@@ -483,9 +651,9 @@
       "cacheWrite": 0
     },
     "~x-ai/grok-latest": {
-      "prompt": 0.000002,
-      "completion": 0.000006,
-      "cacheRead": 5e-7,
+      "prompt": 0.0000016,
+      "completion": 0.0000048,
+      "cacheRead": 4e-7,
       "cacheWrite": 0
     },
     "aion-labs/aion-3.0-mini": {
@@ -536,12 +704,6 @@
       "cacheRead": 0,
       "cacheWrite": 0
     },
-    "nex-agi/nex-n2-mini": {
-      "prompt": 2.5e-8,
-      "completion": 1e-7,
-      "cacheRead": 2.5e-9,
-      "cacheWrite": 0
-    },
     "sakana/fugu-ultra": {
       "prompt": 0.000005,
       "completion": 0.00003,
@@ -567,9 +729,15 @@
       "cacheWrite": 0
     },
     "z-ai/glm-5.2": {
-      "prompt": 9.66e-7,
-      "completion": 0.000003036,
-      "cacheRead": 1.932e-7,
+      "prompt": 6.496e-7,
+      "completion": 0.0000020416,
+      "cacheRead": 1.2064e-7,
+      "cacheWrite": 0
+    },
+    "z-ai/glm-5.2:batch": {
+      "prompt": 7e-7,
+      "completion": 0.0000022,
+      "cacheRead": 7e-8,
       "cacheWrite": 0
     },
     "z-ai/glm-5.2:free": {
@@ -585,8 +753,8 @@
       "cacheWrite": 0
     },
     "moonshotai/kimi-k2.7-code": {
-      "prompt": 6.6e-7,
-      "completion": 0.0000034,
+      "prompt": 7.062e-7,
+      "completion": 0.00000321,
       "cacheRead": 1.8e-7,
       "cacheWrite": 0
     },
@@ -608,12 +776,6 @@
       "cacheRead": 5e-7,
       "cacheWrite": 0.00000625
     },
-    "nex-agi/nex-n2-pro": {
-      "prompt": 2.5e-7,
-      "completion": 0.000001,
-      "cacheRead": 2.5e-8,
-      "cacheWrite": 0
-    },
     "nvidia/nemotron-3.5-content-safety": {
       "prompt": 2e-7,
       "completion": 2e-7,
@@ -627,9 +789,9 @@
       "cacheWrite": 0
     },
     "nvidia/nemotron-3-ultra-550b-a55b": {
-      "prompt": 6.25e-7,
-      "completion": 0.000003125,
-      "cacheRead": 1.875e-7,
+      "prompt": 6e-7,
+      "completion": 0.0000024,
+      "cacheRead": 1.2e-7,
       "cacheWrite": 0
     },
     "nvidia/nemotron-3-ultra-550b-a55b:free": {
@@ -648,18 +810,6 @@
       "prompt": 3e-7,
       "completion": 0.0000012,
       "cacheRead": 6e-8,
-      "cacheWrite": 0
-    },
-    "minimax/minimax-m3:batch": {
-      "prompt": 3e-7,
-      "completion": 0.0000012,
-      "cacheRead": 6e-8,
-      "cacheWrite": 0
-    },
-    "minimax/minimax-m3:free": {
-      "prompt": 0,
-      "completion": 0,
-      "cacheRead": 0,
       "cacheWrite": 0
     },
     "stepfun/step-3.7-flash": {
@@ -740,12 +890,6 @@
       "cacheRead": 1.6e-7,
       "cacheWrite": 0
     },
-    "ibm-granite/granite-4.1-8b": {
-      "prompt": 5e-8,
-      "completion": 1e-7,
-      "cacheRead": 5e-8,
-      "cacheWrite": 0
-    },
     "mistralai/mistral-medium-3-5": {
       "prompt": 0.0000015,
       "completion": 0.0000075,
@@ -783,9 +927,9 @@
       "cacheWrite": 3.75e-7
     },
     "~moonshotai/kimi-latest": {
-      "prompt": 0.0000025,
-      "completion": 0.000014,
-      "cacheRead": 2.9e-7,
+      "prompt": 0.0000015,
+      "completion": 0.0000075,
+      "cacheRead": 1.5e-7,
       "cacheWrite": 0
     },
     "~google/gemini-flash-latest": {
@@ -795,12 +939,6 @@
       "cacheWrite": 4.16666666666667e-8
     },
     "~anthropic/claude-sonnet-latest": {
-      "prompt": 0.000002,
-      "completion": 0.00001,
-      "cacheRead": 2e-7,
-      "cacheWrite": 0.0000025
-    },
-    "~openai/gpt-latest": {
       "prompt": 0.000002,
       "completion": 0.00001,
       "cacheRead": 2e-7,
@@ -819,8 +957,8 @@
       "cacheWrite": 2.34375e-7
     },
     "qwen/qwen3.6-35b-a3b": {
-      "prompt": 1e-7,
-      "completion": 9e-7,
+      "prompt": 1.5e-7,
+      "completion": 0.000001,
       "cacheRead": 5e-8,
       "cacheWrite": 0
     },
@@ -831,9 +969,9 @@
       "cacheWrite": 0.00000128375
     },
     "qwen/qwen3.6-27b": {
-      "prompt": 6e-7,
-      "completion": 0.0000036,
-      "cacheRead": 1.2e-7,
+      "prompt": 3e-7,
+      "completion": 0.000002,
+      "cacheRead": 3e-8,
       "cacheWrite": 0
     },
     "openai/gpt-5.5-pro": {
@@ -861,9 +999,9 @@
       "cacheWrite": 0
     },
     "deepseek/deepseek-v4-pro": {
-      "prompt": 0.00000104226,
-      "completion": 0.00000208452,
-      "cacheRead": 8.6855e-8,
+      "prompt": 9.5526e-7,
+      "completion": 0.00000191052,
+      "cacheRead": 7.9605e-8,
       "cacheWrite": 0
     },
     "deepseek/deepseek-v4-flash": {
@@ -933,9 +1071,9 @@
       "cacheWrite": 0
     },
     "google/gemma-4-26b-a4b-it": {
-      "prompt": 7e-8,
-      "completion": 3.4e-7,
-      "cacheRead": 0,
+      "prompt": 9e-8,
+      "completion": 3e-7,
+      "cacheRead": 5e-8,
       "cacheWrite": 0
     },
     "google/gemma-4-26b-a4b-it:free": {
@@ -948,12 +1086,6 @@
       "prompt": 9e-8,
       "completion": 3.4e-7,
       "cacheRead": 5e-8,
-      "cacheWrite": 0
-    },
-    "google/gemma-4-31b-it:batch": {
-      "prompt": 3.9e-7,
-      "completion": 9.7e-7,
-      "cacheRead": 0,
       "cacheWrite": 0
     },
     "google/gemma-4-31b-it:free": {
@@ -1022,12 +1154,6 @@
       "cacheRead": 6e-8,
       "cacheWrite": 0
     },
-    "minimax/minimax-m2.7:free": {
-      "prompt": 0,
-      "completion": 0,
-      "cacheRead": 0,
-      "cacheWrite": 0
-    },
     "openai/gpt-5.4-nano": {
       "prompt": 2e-7,
       "completion": 0.00000125,
@@ -1058,6 +1184,12 @@
       "cacheRead": 1.5e-8,
       "cacheWrite": 0
     },
+    "mistralai/mistral-small-2603:batch": {
+      "prompt": 7.5e-8,
+      "completion": 3e-7,
+      "cacheRead": 7.5e-9,
+      "cacheWrite": 0
+    },
     "z-ai/glm-5-turbo": {
       "prompt": 0.0000012,
       "completion": 0.000004,
@@ -1065,8 +1197,8 @@
       "cacheWrite": 0
     },
     "nvidia/nemotron-3-super-120b-a12b": {
-      "prompt": 8.5e-8,
-      "completion": 4e-7,
+      "prompt": 8e-8,
+      "completion": 4.5e-7,
       "cacheRead": 0,
       "cacheWrite": 0
     },
@@ -1085,12 +1217,6 @@
     "qwen/qwen3.5-9b": {
       "prompt": 1e-7,
       "completion": 1.5e-7,
-      "cacheRead": 0,
-      "cacheWrite": 0
-    },
-    "qwen/qwen3.5-9b:batch": {
-      "prompt": 1.7e-7,
-      "completion": 2.5e-7,
       "cacheRead": 0,
       "cacheWrite": 0
     },
@@ -1143,9 +1269,9 @@
       "cacheWrite": 0
     },
     "qwen/qwen3.5-35b-a3b": {
-      "prompt": 2.5e-7,
+      "prompt": 3.125e-7,
       "completion": 0.00000125,
-      "cacheRead": 2.5e-7,
+      "cacheRead": 1.5625e-7,
       "cacheWrite": 0
     },
     "qwen/qwen3.5-27b": {
@@ -1155,8 +1281,8 @@
       "cacheWrite": 0
     },
     "qwen/qwen3.5-122b-a10b": {
-      "prompt": 2.9e-7,
-      "completion": 0.0000024,
+      "prompt": 2.6e-7,
+      "completion": 0.00000208,
       "cacheRead": 0,
       "cacheWrite": 0
     },
@@ -1305,9 +1431,9 @@
       "cacheWrite": 0
     },
     "z-ai/glm-4.7-flash": {
-      "prompt": 6e-8,
+      "prompt": 6.05e-8,
       "completion": 4e-7,
-      "cacheRead": 1e-8,
+      "cacheRead": 0,
       "cacheWrite": 0
     },
     "openai/gpt-5.2-codex": {
@@ -1436,16 +1562,22 @@
       "cacheRead": 1.5e-8,
       "cacheWrite": 0
     },
+    "mistralai/ministral-8b-2512:batch": {
+      "prompt": 7.5e-8,
+      "completion": 7.5e-8,
+      "cacheRead": 7.5e-9,
+      "cacheWrite": 0
+    },
     "mistralai/ministral-3b-2512": {
       "prompt": 1e-7,
       "completion": 1e-7,
       "cacheRead": 1e-8,
       "cacheWrite": 0
     },
-    "mistralai/mistral-large-2512": {
-      "prompt": 5e-7,
-      "completion": 0.0000015,
-      "cacheRead": 5e-8,
+    "mistralai/mistral-large-2512:batch": {
+      "prompt": 2.5e-7,
+      "completion": 7.5e-7,
+      "cacheRead": 2.5e-8,
       "cacheWrite": 0
     },
     "deepseek/deepseek-v3.2": {
@@ -1593,8 +1725,8 @@
       "cacheWrite": 0
     },
     "qwen/qwen3-vl-30b-a3b-instruct": {
-      "prompt": 1.5e-7,
-      "completion": 6e-7,
+      "prompt": 1.3e-7,
+      "completion": 5.2e-7,
       "cacheRead": 0,
       "cacheWrite": 0
     },
@@ -1611,9 +1743,9 @@
       "cacheWrite": 0
     },
     "z-ai/glm-4.6": {
-      "prompt": 5.5e-7,
-      "completion": 0.0000022,
-      "cacheRead": 1.1e-7,
+      "prompt": 4.3e-7,
+      "completion": 0.00000175,
+      "cacheRead": 8e-8,
       "cacheWrite": 0
     },
     "anthropic/claude-sonnet-4.5": {
@@ -1689,9 +1821,9 @@
       "cacheWrite": 0
     },
     "qwen/qwen3-next-80b-a3b-instruct": {
-      "prompt": 1e-7,
+      "prompt": 9e-8,
       "completion": 0.0000011,
-      "cacheRead": 7e-8,
+      "cacheRead": 0,
       "cacheWrite": 0
     },
     "qwen/qwen-plus-2025-07-28": {
@@ -1712,12 +1844,6 @@
       "cacheRead": 0,
       "cacheWrite": 0
     },
-    "nousresearch/hermes-4-70b": {
-      "prompt": 1.3e-7,
-      "completion": 4e-7,
-      "cacheRead": 0,
-      "cacheWrite": 0
-    },
     "nousresearch/hermes-4-405b": {
       "prompt": 0.000001,
       "completion": 0.000003,
@@ -1725,15 +1851,21 @@
       "cacheWrite": 0
     },
     "deepseek/deepseek-chat-v3.1": {
-      "prompt": 5.5e-7,
-      "completion": 0.00000165,
-      "cacheRead": 5.5e-7,
+      "prompt": 2.5e-7,
+      "completion": 9.5e-7,
+      "cacheRead": 1.3e-7,
       "cacheWrite": 0
     },
     "mistralai/mistral-medium-3.1": {
       "prompt": 4e-7,
       "completion": 0.000002,
       "cacheRead": 4e-8,
+      "cacheWrite": 0
+    },
+    "mistralai/mistral-medium-3.1:batch": {
+      "prompt": 2e-7,
+      "completion": 0.000001,
+      "cacheRead": 2e-8,
       "cacheWrite": 0
     },
     "z-ai/glm-4.5v": {
@@ -1779,27 +1911,15 @@
       "cacheWrite": 0
     },
     "openai/gpt-oss-120b": {
-      "prompt": 3.7e-8,
-      "completion": 1.7e-7,
-      "cacheRead": 0,
-      "cacheWrite": 0
-    },
-    "openai/gpt-oss-120b:batch": {
       "prompt": 1.5e-7,
       "completion": 6e-7,
-      "cacheRead": 0,
+      "cacheRead": 7.5e-8,
       "cacheWrite": 0
     },
     "openai/gpt-oss-20b": {
       "prompt": 3e-8,
       "completion": 1.3e-7,
       "cacheRead": 3e-8,
-      "cacheWrite": 0
-    },
-    "openai/gpt-oss-20b:batch": {
-      "prompt": 5e-8,
-      "completion": 2e-7,
-      "cacheRead": 0,
       "cacheWrite": 0
     },
     "anthropic/claude-opus-4.1": {
@@ -1818,6 +1938,12 @@
       "prompt": 3e-7,
       "completion": 9e-7,
       "cacheRead": 3e-8,
+      "cacheWrite": 0
+    },
+    "mistralai/codestral-2508:batch": {
+      "prompt": 1.5e-7,
+      "completion": 4.5e-7,
+      "cacheRead": 1.5e-8,
       "cacheWrite": 0
     },
     "qwen/qwen3-coder-30b-a3b-instruct": {
@@ -1917,13 +2043,13 @@
       "cacheWrite": 0
     },
     "mistralai/mistral-small-3.2-24b-instruct": {
-      "prompt": 7.5e-8,
-      "completion": 2e-7,
+      "prompt": 9.375e-8,
+      "completion": 2.5e-7,
       "cacheRead": 0,
       "cacheWrite": 0
     },
     "minimax/minimax-m1": {
-      "prompt": 5.5e-7,
+      "prompt": 4e-7,
       "completion": 0.0000022,
       "cacheRead": 0,
       "cacheWrite": 0
@@ -1970,12 +2096,6 @@
       "cacheRead": 3.5e-7,
       "cacheWrite": 0
     },
-    "anthropic/claude-opus-4": {
-      "prompt": 0.000015,
-      "completion": 0.000075,
-      "cacheRead": 0.0000015,
-      "cacheWrite": 0.00001875
-    },
     "anthropic/claude-sonnet-4": {
       "prompt": 0.000003,
       "completion": 0.000015,
@@ -1987,12 +2107,6 @@
       "completion": 0.000002,
       "cacheRead": 4e-8,
       "cacheWrite": 0
-    },
-    "google/gemini-2.5-pro-preview-05-06": {
-      "prompt": 0.00000125,
-      "completion": 0.00001,
-      "cacheRead": 1.25e-7,
-      "cacheWrite": 3.75e-7
     },
     "meta-llama/llama-guard-4-12b": {
       "prompt": 1.8e-7,
@@ -2097,8 +2211,8 @@
       "cacheWrite": 0
     },
     "meta-llama/llama-4-maverick": {
-      "prompt": 2e-7,
-      "completion": 6.96e-7,
+      "prompt": 1.875e-7,
+      "completion": 6.525e-7,
       "cacheRead": 0,
       "cacheWrite": 0
     },
@@ -2504,12 +2618,6 @@
       "cacheRead": 0,
       "cacheWrite": 0
     },
-    "openai/gpt-4-turbo-preview": {
-      "prompt": 0.00001,
-      "completion": 0.00003,
-      "cacheRead": 0,
-      "cacheWrite": 0
-    },
     "openrouter/auto": {
       "prompt": -1,
       "completion": -1,
@@ -2541,8 +2649,8 @@
       "cacheWrite": 0
     },
     "gryphe/mythomax-l2-13b": {
-      "prompt": 6e-8,
-      "completion": 6e-8,
+      "prompt": 8e-8,
+      "completion": 1.1e-7,
       "cacheRead": 0,
       "cacheWrite": 0
     },
